@@ -63,3 +63,7 @@ markup:
           block: [['\[', '\]'], ['$$', '$$']]
           inline: [['\(', '\)'], ['$','$']]
         enable: true
+
+services:
+  googleAnalytics:
+    ID: G-5L9P03RR0R

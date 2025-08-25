@@ -10,7 +10,7 @@ toc: false
 
 {{< cards >}}
   {{< card link="gesp" title="GESP" icon="book-open" >}}
-  {{< card link="投资" title="投资" icon="book-open" >}}
+  {{< card link="invest" title="投资" icon="book-open" >}}
   {{< card link="about" title="About" icon="user" >}}
 {{< /cards >}}
 

@@ -18,13 +18,19 @@ markup:
   highlight:
     noClasses: false
 
+
+
 menu:
   main:
     - name: GESP
       pageRef: /gesp
       weight: 1
-    - name: 金融
-      pageRef: /finance
+    - name: 1级
+      pageRef: /gesp/1
+      weight: 1
+      parent: GESP
+    - name: 投资
+      pageRef: /invest
       weight: 2
     - name: Blog ↗
       url: "https://www.coderli.com/"
@@ -32,12 +38,15 @@ menu:
     - name: About
       pageRef: /about
       weight: 4
-    - name: Search
+    - name: Tags
+      pageRef: /tags
       weight: 5
+    - name: Search
+      weight: 6
       params:
         type: search
     - name: GitHub
-      weight: 6
+      weight: 7
       url: "https://github.com/lihongzheshuai/yummy-code"
       params:
         icon: github
@@ -58,6 +67,32 @@ params:
   page:
     # full (100%), wide (90rem), normal (1280px)
     width: wide
+
+  comments:
+    enable: true
+    type: giscus
+
+    giscus:
+      repo: lihongzheshuai/yummy-dad-code-hextra
+      repoId: R_kgDOPiOt7w
+      category: General
+      categoryId: DIC_kwDOPiOt784CujMF
+  blog:
+    list:
+      displayTags: true
+  toc:
+    displayTags: true
+  # Display the last modification date
+  displayUpdatedDate: true
+  dateFormat: "2006年1月2日"
+
+permalinks:
+  page:
+    gesp: /:sections/:slug/
+    invest: /:sections/:slug/
+
+
+enableGitInfo: true
 
 markup:
   goldmark:

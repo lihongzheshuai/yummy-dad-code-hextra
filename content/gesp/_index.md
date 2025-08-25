@@ -1,6 +1,6 @@
 ---
 title: GESP C++
-next: first-page
+next: 2024-09-07-gesp-config-g++
 ---
 
 CCF(中国计算机学会), [GESP(CCF编程能力等级认证)](https://gesp.ccf.org.cn/) C++认证学习资料。

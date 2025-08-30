@@ -1,6 +1,9 @@
 @echo off
 setlocal
 
+REM 设置控制台编码为UTF-8，解决VSCode中文乱码问题
+chcp 65001 >nul 2>&1
+
 REM 设置默认参数
 set PORT=1313
 set HUGO_ARGS=--disableFastRender --cleanDestinationDir

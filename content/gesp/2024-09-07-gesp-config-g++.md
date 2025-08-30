@@ -1,21 +1,21 @@
 ---
 layout: post
 title: 开始【环境配置】
-date: 2024-09-07T00:00:00Z
+date: 2024-09-07T00:00:00+0800
 author: OneCoder
-slug: gesp-config-g++
 comments: true
-tags: 
+tags:
 - GESP
 - C++
 - Dev-C++
-categories: 
+categories:
 - GESP
 - 一级
+slug: gesp-config-g++
 type: docs
+weight: 1
 prev: /
 next: gesp/1/
-weight: 1
 ---
 
 本系列用于记录与孩子共同成长学习GESP的过程和练习，希望能有所积累给我和孩子形成一份资产沉淀。

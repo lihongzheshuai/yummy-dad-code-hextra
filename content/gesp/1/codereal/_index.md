@@ -3,6 +3,7 @@ title: 真题
 type: docs
 prev: gesp/1/
 next: gesp/1/codereal/2024-10-26-gesp-1-luogu-b3834
+weight: 3
 sidebar:
   open: true
 ---

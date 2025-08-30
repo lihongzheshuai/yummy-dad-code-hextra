@@ -37,6 +37,7 @@ class GESPFileOrganizer:
             "processed": 0,
             "copied": 0,
             "skipped": 0,
+            "existed": 0,
             "errors": 0
         }
     
@@ -138,7 +139,7 @@ class GESPFileOrganizer:
         pattern = r'^\d{4}-\d{2}-\d{2}-gesp-.*\.md$'
         return bool(re.match(pattern, filename))
     
-    def copy_file_to_target(self, source_file: Path, relative_path: str) -> bool:
+    def copy_file_to_target(self, source_file: Path, relative_path: str) -> tuple[bool, str]:
         """
         将文件拷贝到目标位置
         
@@ -147,9 +148,14 @@ class GESPFileOrganizer:
             relative_path: 相对于目标根目录的路径
             
         Returns:
-            是否成功拷贝
+            Tuple[是否成功, 操作类型('copied'|'existed'|'error')]
         """
         target_path = self.target_dir / relative_path / source_file.name
+        
+        # 检查目标文件是否已存在
+        if target_path.exists():
+            print(f"⊝ 文件已存在，跳过拷贝: {source_file.name} -> {relative_path}/")
+            return True, 'existed'
         
         try:
             # 创建目标目录
@@ -159,11 +165,11 @@ class GESPFileOrganizer:
             shutil.copy2(source_file, target_path)
             
             print(f"✓ 拷贝成功: {source_file.name} -> {relative_path}/")
-            return True
+            return True, 'copied'
             
         except Exception as e:
             print(f"✗ 拷贝失败: {source_file.name} - {e}")
-            return False
+            return False, 'error'
     
     def process_file(self, file_path: Path) -> bool:
         """
@@ -203,8 +209,12 @@ class GESPFileOrganizer:
                 return False
             
             # 拷贝文件
-            if self.copy_file_to_target(file_path, target_subdir):
-                self.stats["copied"] += 1
+            success, operation = self.copy_file_to_target(file_path, target_subdir)
+            if success:
+                if operation == 'copied':
+                    self.stats["copied"] += 1
+                elif operation == 'existed':
+                    self.stats["existed"] += 1
                 return True
             else:
                 self.stats["errors"] += 1
@@ -252,6 +262,7 @@ class GESPFileOrganizer:
         print("处理完成！统计信息:")
         print(f"总共处理文件: {self.stats['processed']}")
         print(f"成功拷贝文件: {self.stats['copied']}")
+        print(f"文件已存在: {self.stats['existed']}")
         print(f"跳过文件: {self.stats['skipped']}")
         print(f"错误文件: {self.stats['errors']}")
         print("=" * 60)

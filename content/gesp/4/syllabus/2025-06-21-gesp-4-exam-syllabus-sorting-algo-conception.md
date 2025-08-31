@@ -124,4 +124,4 @@ GESP C++四级官方考试大纲中，共有11条考点，本文针对第7条考
 | 桶排序  | $O(n + k)$   | $O(n + k)$ | ✅    | 分布均匀的浮点数  |
 
 ---
-{% include custom/custom-post-content-footer.md %}
+

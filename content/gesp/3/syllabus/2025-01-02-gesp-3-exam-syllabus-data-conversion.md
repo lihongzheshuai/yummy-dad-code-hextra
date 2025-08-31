@@ -69,7 +69,7 @@ GESP C++三级官方考试大纲中，共有8条考点，本文针对C++（2）�
 
 ---
 
-{% include custom/custom-post-content-inner.html %}
+
 
 ## **二、 进制之间的转换**
 
@@ -169,4 +169,4 @@ GESP C++三级官方考试大纲中，共有8条考点，本文针对C++（2）�
 这些进制之间的转换是计算机科学中的基础知识，广泛用于计算机编程、网络通信和硬件设计等领域。
 
 ---
-{% include custom/custom-post-content-footer.md %}
+

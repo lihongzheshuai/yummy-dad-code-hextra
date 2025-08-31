@@ -103,7 +103,7 @@ int main() {
 
 ---
 
-{% include custom/custom-post-content-inner.html %}
+
 
 ## **二、模拟算法**
 
@@ -193,4 +193,4 @@ Traffic light state: Green
 希望这些内容能帮助你理解**模拟算法**和**枚举算法**的区别以及适用场景！
 
 ---
-{% include custom/custom-post-content-footer.md %}
+

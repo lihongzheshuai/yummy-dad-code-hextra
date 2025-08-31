@@ -222,4 +222,4 @@ printf("%#X\n", x);     // 0XFF
 | 在嵌入式/老系统中（如比赛）   | `printf`        |
 
 ---
-{% include custom/custom-post-content-footer.md %}
+

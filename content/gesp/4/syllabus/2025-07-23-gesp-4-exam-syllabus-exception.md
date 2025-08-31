@@ -291,7 +291,7 @@ Error: Something went wrong
 
 ---
 
-{% include custom/custom-post-content-inner.html %}
+
 
 ## 三、标准异常类
 
@@ -326,4 +326,4 @@ C++ 标准库提供了 `std::exception` 层次结构的异常类，常用类包�
 C++ 的异常处理机制通过 `try`、`catch` 和 `throw` 提供了一种强大的错误处理方式。常用方法包括基本异常处理、捕获多种异常类型、自定义异常类、使用 `noexcept` 优化性能以及结合 RAII 确保资源安全。遵循最佳实践（如使用标准异常类、避免滥用通配符捕获）可以编写健壮且可维护的代码。
 
 ---
-{% include custom/custom-post-content-footer.md %}
+

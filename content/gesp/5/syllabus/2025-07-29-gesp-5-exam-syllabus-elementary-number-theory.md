@@ -141,7 +141,7 @@ $$
 
 ---
 
-{% include custom/custom-post-content-inner.html %}
+
 
 ## 三、同余与模运算
 
@@ -292,4 +292,4 @@ $$
 `素数`和`合数`是最基本的分类，`GCD`和`LCM`帮我们处理分数和周期问题，`同余`让我们看到数的循环规律，`约数`和`倍数`揭示数的除法关系，`质因数分解把`数拆成“零件”，`奇偶性`则带来简单的加法、乘法规律。
 
 ---
-{% include custom/custom-post-content-footer.md %}
+

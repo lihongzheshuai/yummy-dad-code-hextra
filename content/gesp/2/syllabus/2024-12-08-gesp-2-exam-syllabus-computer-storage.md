@@ -99,7 +99,7 @@ GESP C++二级官方考试大纲中，共有9条考点，本文针对C++（1）�
 - **访问速度**：对于需要快速响应的任务，如处理器缓存、主存储器，通常需要速度较快的存储器（如 RAM、Cache、SSD）。
 - **存储容量**：对于大规模数据存储（如文件存储、视频存储、数据库）。
 
-{% include custom/custom-post-content-inner.html %}
+
 
 ---
 
@@ -182,4 +182,4 @@ RAM（Random Access Memory，随机存取存储器）是计算机中的主要内
 
 ---
 
-{% include custom/custom-post-content-footer.md %}
+

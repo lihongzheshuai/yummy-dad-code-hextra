@@ -539,4 +539,4 @@ int main() {
 三种算法都属于简单直观的内部排序，适合小规模或初学时理解排序思想。对于大规模数据，建议学习快速排序、归并排序、堆排序等更高效的算法。
 
 ---
-{% include custom/custom-post-content-footer.md %}
+

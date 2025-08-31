@@ -1287,4 +1287,4 @@ arr[1][2][3] = 99;
 * 每个 `vector` 独立维护数据和容量，因此 `vector<vector<T>>` 在物理上**并不连续**（适合灵活访问，不适合频繁跨行大规模遍历）。
 
 ---
-{% include custom/custom-post-content-footer.md %}
+

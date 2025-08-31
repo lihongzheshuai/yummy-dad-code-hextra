@@ -105,7 +105,7 @@ OSI模型的七个层次从下到上分别是：
 - 每一层独立工作，简化了网络协议的设计与实现。
 - 各层的功能清晰，可以帮助网络问题的定位和排查。
 
-{% include custom/custom-post-content-inner.html %}
+
 
 ---
 
@@ -203,7 +203,7 @@ OSI模型的七个层次从下到上分别是：
 - **实际应用**：TCP/IP模型直接基于实际的互联网协议和实践，是现实中网络设计和通信的基础。
 - **可扩展性**：TCP/IP协议族的开放性使得其能够适应多种网络技术和设备。
 
-{% include custom/custom-post-content-inner.html %}
+
 
 ---
 
@@ -384,4 +384,4 @@ IPv4地址由两部分组成：**网络部分**和**主机部分**。
 
 ---
 
-{% include custom/custom-post-content-footer.md %}
+

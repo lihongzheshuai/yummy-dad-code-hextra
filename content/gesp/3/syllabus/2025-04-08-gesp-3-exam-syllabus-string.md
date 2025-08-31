@@ -178,4 +178,4 @@ char lower_c = tolower('B'); // 'b'
 ```
 
 ---
-{% include custom/custom-post-content-footer.md %}
+

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 【GESP】C++ 2025年6月一级考试-客观题真题解析
+title: 202506-客观题解析
 date: 2025-07-04T08:00:00+0800
 author: OneCoder
 comments: true
@@ -842,4 +842,3 @@ if (X > 3 && X < 5)
 ```
 
 ---
-{% include custom/custom-post-content-footer.md %}

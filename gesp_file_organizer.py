@@ -8,6 +8,8 @@ GESP文件分类整理脚本
 import os
 import re
 import shutil
+import subprocess
+import sys
 import yaml
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
@@ -139,6 +141,80 @@ class GESPFileOrganizer:
         pattern = r'^\d{4}-\d{2}-\d{2}-gesp-.*\.md$'
         return bool(re.match(pattern, filename))
     
+    def check_file_exists_in_target(self, filename: str) -> Optional[str]:
+        """
+        检查文件是否在目标根路径下的任何位置存在
+        
+        Args:
+            filename: 文件名
+            
+        Returns:
+            如果文件存在，返回相对于目标根目录的路径；否则返回None
+        """
+        # 在目标根目录下递归查找同名文件
+        for existing_file in self.target_dir.rglob(filename):
+            # 返回相对于目标根目录的路径
+            return str(existing_file.relative_to(self.target_dir))
+        return None
+    
+    def run_formatter(self) -> bool:
+        """
+        运行formater.py脚本格式化目标目录中的文件
+        
+        Returns:
+            是否成功执行
+        """
+        try:
+            # 获取脚本所在目录
+            script_dir = Path(__file__).parent
+            formatter_script = script_dir / "formater.py"
+            
+            # 检查formater.py是否存在
+            if not formatter_script.exists():
+                print(f"❗ 警告: formater.py 脚本不存在：{formatter_script}")
+                return False
+            
+            print("\n" + "=" * 60)
+            print("🛠️  开始运行 formater.py 格式化脚本...")
+            print("=" * 60)
+            
+            # 构建命令：传递目标目录的相对路径
+            relative_target = self.target_dir.relative_to(script_dir)
+            
+            # 使用subprocess运行脚本，传递目标目录作为参数
+            cmd = [sys.executable, str(formatter_script)]
+            
+            # 准备输入：目标目录 + 确认执行
+            input_data = f"{relative_target}\ny\n"
+            
+            # 执行脚本
+            result = subprocess.run(
+                cmd,
+                input=input_data,
+                text=True,
+                capture_output=True,
+                cwd=script_dir,
+                encoding='utf-8'
+            )
+            
+            # 输出结果
+            if result.stdout:
+                print(result.stdout)
+            
+            if result.stderr:
+                print(f"⚠️  警告信息:\n{result.stderr}")
+            
+            if result.returncode == 0:
+                print("\n✅ formater.py 脚本执行成功！")
+                return True
+            else:
+                print(f"\n❌ formater.py 脚本执行失败，退出码: {result.returncode}")
+                return False
+                
+        except Exception as e:
+            print(f"\n❌ 运行formater.py时出错: {e}")
+            return False
+    
     def copy_file_to_target(self, source_file: Path, relative_path: str) -> tuple[bool, str]:
         """
         将文件拷贝到目标位置
@@ -152,9 +228,10 @@ class GESPFileOrganizer:
         """
         target_path = self.target_dir / relative_path / source_file.name
         
-        # 检查目标文件是否已存在
-        if target_path.exists():
-            print(f"⊝ 文件已存在，跳过拷贝: {source_file.name} -> {relative_path}/")
+        # 检查文件是否在目标根路径下的任何位置已存在
+        existing_path = self.check_file_exists_in_target(source_file.name)
+        if existing_path:
+            print(f"⊝ 文件已存在，跳过拷贝: {source_file.name} -> 已存在于 {existing_path}")
             return True, 'existed'
         
         try:
@@ -259,18 +336,36 @@ class GESPFileOrganizer:
         # 输出统计信息
         print()
         print("=" * 60)
-        print("处理完成！统计信息:")
+        print("文件拷贝完成！统计信息:")
         print(f"总共处理文件: {self.stats['processed']}")
         print(f"成功拷贝文件: {self.stats['copied']}")
         print(f"文件已存在: {self.stats['existed']}")
         print(f"跳过文件: {self.stats['skipped']}")
         print(f"错误文件: {self.stats['errors']}")
         print("=" * 60)
+        
+        # 如果有文件被拷贝，自动运行格式化脚本
+        if self.stats['copied'] > 0:
+            print(f"\n🎯 检测到 {self.stats['copied']} 个文件被成功拷贝，将自动运行格式化脚本...")
+            
+            # 询问用户是否要运行格式化脚本
+            run_formatter = input("是否要运行 formater.py 格式化拷贝的文件头？(Y/n): ").strip().lower()
+            
+            if run_formatter not in ['n', 'no', 'N', 'NO', '否']:
+                # 运行格式化脚本
+                if self.run_formatter():
+                    print("\n🎉 文件拷贝和格式化流程全部完成！")
+                else:
+                    print("\n⚠️ 文件拷贝完成，但格式化过程中出现了问题。")
+            else:
+                print("\n✅ 文件拷贝完成（跳过格式化）。")
+        else:
+            print("\n💡 没有新文件被拷贝，无需运行格式化脚本。")
     
     def preview_organization(self) -> None:
-        """预览文件分类结果，不实际拷贝"""
+        """预览文件分类结果，不实际拷贝，默认只显示将被拷贝的文件"""
         print("=" * 60)
-        print("GESP文件分类预览（仅预览，不实际拷贝）")
+        print("GESP文件分类预览")
         print("=" * 60)
         print(f"源目录: {self.source_dir}")
         print(f"目标目录: {self.target_dir}")
@@ -279,6 +374,9 @@ class GESPFileOrganizer:
         if not self.source_dir.exists():
             print(f"错误: 源目录不存在 - {self.source_dir}")
             return
+        
+        # 创建目标根目录（如果不存在）
+        self.target_dir.mkdir(parents=True, exist_ok=True)
         
         # 遍历源目录中的所有.md文件
         md_files = list(self.source_dir.rglob("*.md"))
@@ -291,6 +389,10 @@ class GESPFileOrganizer:
         print()
         
         organization_map = {}
+        existed_files_map = {}
+        total_files = 0
+        new_files = 0
+        existed_files = 0
         
         # 分析每个文件
         for file_path in md_files:
@@ -298,6 +400,8 @@ class GESPFileOrganizer:
             
             if not self.is_gesp_file(filename):
                 continue
+            
+            total_files += 1
             
             try:
                 with open(file_path, 'r', encoding='utf-8') as f:
@@ -309,20 +413,53 @@ class GESPFileOrganizer:
                 
                 target_subdir = self.determine_subdirectory(frontmatter, filename)
                 if target_subdir:
-                    if target_subdir not in organization_map:
-                        organization_map[target_subdir] = []
-                    organization_map[target_subdir].append(filename)
+                    # 检查文件是否在目标根路径下的任何位置已存在
+                    existing_path = self.check_file_exists_in_target(filename)
+                    
+                    if existing_path:
+                        # 文件已存在，记录到已存在文件映射
+                        # 使用实际存在的路径作为key
+                        existing_dir = str(Path(existing_path).parent) if Path(existing_path).parent != Path('.') else 'root'
+                        if existing_dir not in existed_files_map:
+                            existed_files_map[existing_dir] = []
+                        existed_files_map[existing_dir].append(f"{filename} (存在于: {existing_path})")
+                        existed_files += 1
+                    else:
+                        # 文件不存在，会被拷贝
+                        if target_subdir not in organization_map:
+                            organization_map[target_subdir] = []
+                        organization_map[target_subdir].append(filename)
+                        new_files += 1
             
             except Exception as e:
                 print(f"分析文件出错: {filename} - {e}")
         
-        # 输出预览结果
-        for subdir, files in sorted(organization_map.items()):
-            print(f"\n📁 {subdir}/ ({len(files)} 个文件)")
-            for filename in sorted(files):
-                print(f"  - {filename}")
+        # 输出预览结果 - 默认只显示将被拷贝的文件
+        if organization_map:
+            print("📝 将被拷贝的新文件:")
+            for subdir, files in sorted(organization_map.items()):
+                print(f"\n📁 {subdir}/ ({len(files)} 个新文件)")
+                for filename in sorted(files):
+                    print(f"  ✓ {filename}")
+        else:
+            print("🚀 没有需要拷贝的新文件")
         
-        print(f"\n总计将拷贝 {sum(len(files) for files in organization_map.values())} 个文件")
+        # 询问用户是否需要查看已存在的文件
+        if existed_files_map:
+            print(f"\n🔍 发现 {existed_files} 个已存在的文件（将被跳过）")
+            show_existed = input("是否需要查看已存在文件的详细信息？(y/N): ").strip().lower()
+            
+            if show_existed in ['y', 'yes', 'Y', 'YES', '是', 'y', 'Y']:
+                print(f"\n📋 已存在的文件（将被跳过）:")
+                for subdir, files in sorted(existed_files_map.items()):
+                    print(f"\n📁 {subdir}/ ({len(files)} 个已存在文件)")
+                    for filename in sorted(files):
+                        print(f"  ⊝ {filename}")
+        
+        print(f"\n📊 统计信息:")
+        print(f"总共GESP文件: {total_files}")
+        print(f"将被拷贝: {new_files}")
+        print(f"已存在（跳过）: {existed_files}")
 
 
 def main():
@@ -330,17 +467,23 @@ def main():
     print("GESP文件分类整理工具")
     print("-" * 40)
     
+    # 默认路径
+    default_source = r"D:\MyCode\lihongzheshuai.github.io\_posts"
+    default_target = r"D:\MyCode\hugo-site\yummy-dad-code-hextra\content\gesp"
+    
     # 获取源目录
-    source_dir = input("请输入源目录路径: ").strip()
+    print(f"默认源目录: {default_source}")
+    source_dir = input("请输入源目录路径（直接回车使用默认值）: ").strip()
     if not source_dir:
-        print("错误: 源目录不能为空")
-        return
+        source_dir = default_source
+        print(f"使用默认源目录: {source_dir}")
     
     # 获取目标目录
-    target_dir = input("请输入目标根目录路径: ").strip()
+    print(f"\n默认目标目录: {default_target}")
+    target_dir = input("请输入目标根目录路径（直接回车使用默认值）: ").strip()
     if not target_dir:
-        print("错误: 目标目录不能为空")
-        return
+        target_dir = default_target
+        print(f"使用默认目标目录: {target_dir}")
     
     # 创建整理器
     organizer = GESPFileOrganizer(source_dir, target_dir)

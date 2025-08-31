@@ -64,7 +64,7 @@ GESP二级练习，一套图形输出，多层循环分支练习，考试常见�
      - 确保n为正整数
      - n=1时只打印一个星号，无需空格
 
-{% include custom/custom-post-content-inner.html %}
+
 
 ---
 
@@ -180,4 +180,4 @@ int main() {
 
 ---
 
-{% include custom/custom-post-content-footer.md %}
+

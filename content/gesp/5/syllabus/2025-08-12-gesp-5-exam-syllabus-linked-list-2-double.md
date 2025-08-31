@@ -434,7 +434,7 @@ DNode* reverseDList(DNode* head) {
 
 ---
 
-{% include custom/custom-post-content-inner.html %}
+
 
 ## 三、总结
 
@@ -550,4 +550,4 @@ int main() {
 
 ---
 
-{% include custom/custom-post-content-footer.md %}
+

@@ -653,4 +653,4 @@ k进制数的计数规则与十进制类似，只是进位的基数从10变成�
 不相等，因此题目说法错误。
 
 ---
-{% include custom/custom-post-content-footer.md %}
+

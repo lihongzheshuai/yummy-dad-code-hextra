@@ -235,7 +235,7 @@ int main() {
 }
 ```
 
-{% include custom/custom-post-content-inner.html %}
+
 
 ---
 
@@ -660,4 +660,4 @@ int main() {
 | 除法 | 高位逐位除     | $O(n)$  |
 
 ---
-{% include custom/custom-post-content-footer.md %}
+

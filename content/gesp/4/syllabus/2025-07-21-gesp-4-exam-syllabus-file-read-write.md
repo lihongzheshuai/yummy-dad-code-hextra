@@ -460,4 +460,4 @@ int main() {
 | **命令行重定向** | 简单，无需改代码，跨平台 | 依赖命令行，无法动态控制 | 快速测试、批处理脚本 |
 
 ---
-{% include custom/custom-post-content-footer.md %}
+

@@ -298,4 +298,4 @@ int* ptr = &a;
 | 函数返回多个结果（输出参数） | 指针（或引用） |
 
 ---
-{% include custom/custom-post-content-footer.md %}
+

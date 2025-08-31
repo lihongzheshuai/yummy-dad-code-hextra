@@ -58,7 +58,7 @@ GESP二级练习，一套图形输出，多层循环分支练习，考试常见�
      - n应当为正整数
      - 考虑n=1的边界情况处理
 
-{% include custom/custom-post-content-inner.html %}
+
 
 ---
 
@@ -93,4 +93,4 @@ int main() {
 
 ---
 
-{% include custom/custom-post-content-footer.md %}
+

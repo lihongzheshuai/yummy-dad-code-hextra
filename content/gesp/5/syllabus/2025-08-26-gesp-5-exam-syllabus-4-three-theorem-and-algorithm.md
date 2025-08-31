@@ -353,7 +353,7 @@ void linear_sieve(int n) {
 | 代码实现 | 简单直观 | 略复杂但更高效 |
 
 ---
-{% include custom/custom-post-content-inner.html %}
+
 
 ## 四、唯一分解定理
 
@@ -468,4 +468,4 @@ $$
 可以验证：$360 \times 1200 = \gcd(360, 1200) \times \mathrm{lcm}(360, 1200)$
 
 ---
-{% include custom/custom-post-content-footer.md %}
+

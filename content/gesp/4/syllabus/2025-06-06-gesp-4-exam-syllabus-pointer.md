@@ -467,4 +467,4 @@ int* p = &a;
 > `*p 是值，p 是地址；& 是取址，* 是取值。`
 
 ---
-{% include custom/custom-post-content-footer.md %}
+

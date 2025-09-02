@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 【GESP】C++ 2025年3月三级考试-客观题真题解析
+title: 202503-客观题解析
 date: 2025-06-24T08:00:00+0800
 author: OneCoder
 comments: true
@@ -12,7 +12,7 @@ categories:
 - 三级
 slug: gesp-3-analysis-of-real-questions-202503
 type: docs
-weight: 17
+weight: 19
 math: true
 mermaid: true
 ---
@@ -653,4 +653,3 @@ k进制数的计数规则与十进制类似，只是进位的基数从10变成�
 不相等，因此题目说法错误。
 
 ---
-

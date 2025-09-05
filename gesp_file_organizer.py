@@ -490,16 +490,31 @@ def main():
     
     # 选择操作模式
     print("\n请选择操作模式:")
-    print("1. 预览分类结果（不实际拷贝）")
-    print("2. 执行文件拷贝")
+    print("1. 仅预览分类结果（不执行拷贝）")
+    print("2. 预览后询问是否执行拷贝")
+    print("3. 直接执行文件拷贝")
     
-    choice = input("请输入选择 (1/2): ").strip()
+    choice = input("请输入选择 (1/2/3): ").strip()
     
     if choice == "1":
+        # 仅预览，不询问是否执行
         organizer.preview_organization()
     elif choice == "2":
-        confirm = input("确认要执行文件拷贝吗？(y/N): ").strip().lower()
-        if confirm in ['y', 'yes']:
+        # 预览后询问是否执行
+        organizer.preview_organization()
+        
+        print("\n" + "=" * 60)
+        execute = input("🚀 是否要执行上述文件拷贝操作？(Y/n): ").strip().lower()
+        
+        if execute not in ['n', 'no', 'N', 'NO', '否']:
+            print("\n开始执行文件拷贝...")
+            organizer.organize_files()
+        else:
+            print("✅ 操作已取消，仅完成预览。")
+    elif choice == "3":
+        # 直接执行拷贝，带确认
+        confirm = input("确认要直接执行文件拷贝吗？(y/N): ").strip().lower()
+        if confirm in ['y', 'yes', 'Y', 'YES', '是']:
             organizer.organize_files()
         else:
             print("操作已取消")

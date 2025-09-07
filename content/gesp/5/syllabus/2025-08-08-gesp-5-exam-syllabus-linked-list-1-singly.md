@@ -30,8 +30,8 @@ GESP C++五级官方考试大纲中，共有`9`条考点，本文针对第`3`条
 
 > [!Tip]
 >
-> * [【GESP】C++五级考试大纲知识点梳理, (1) 初等数论](https://www.coderli.com/gesp-5-exam-syllabus-elementary-number-theory/)
-> * [【GESP】C++五级考试大纲知识点梳理, (2) 模拟高精度计算](https://www.coderli.com/gesp-5-exam-syllabus-simulate-high-precision-arithmetic/)
+> * [【GESP】C++五级考试大纲知识点梳理, (1) 初等数论](/gesp/5/syllabus/gesp-5-exam-syllabus-elementary-number-theory/)
+> * [【GESP】C++五级考试大纲知识点梳理, (2) 模拟高精度计算](/gesp/5/syllabus/gesp-5-exam-syllabus-simulate-high-precision-arithmetic/)
 
 <!--more-->
 

@@ -30,11 +30,11 @@ GESP C++五级官方考试大纲中，共有`9`条考点，本文针对第`3`条
 
 > [!Tip]
 >
-> * [【GESP】C++五级考试大纲知识点梳理, (1) 初等数论](https://www.coderli.com/gesp-5-exam-syllabus-elementary-number-theory/)
-> * [【GESP】C++五级考试大纲知识点梳理, (2) 模拟高精度计算](https://www.coderli.com/gesp-5-exam-syllabus-simulate-high-precision-arithmetic/)
-> * [【GESP】C++五级考试大纲知识点梳理, (3-1) 链表-单链表](https://www.coderli.com/gesp-5-exam-syllabus-linked-list-1-singly/)
-> * [【GESP】C++五级考试大纲知识点梳理, (3-2) 链表-双向链表](https://www.coderli.com/gesp-5-exam-syllabus-linked-list-2-double/)
-> * [【GESP】C++五级考试大纲知识点梳理, (3-3) 链表-单向循环链表](https://www.coderli.com/gesp-5-exam-syllabus-3-linked-list-3-singly-circle/)
+> * [【GESP】C++五级考试大纲知识点梳理, (1) 初等数论](/gesp/5/syllabus/gesp-5-exam-syllabus-elementary-number-theory/)
+> * [【GESP】C++五级考试大纲知识点梳理, (2) 模拟高精度计算](/gesp/5/syllabus/gesp-5-exam-syllabus-simulate-high-precision-arithmetic/)
+> * [【GESP】C++五级考试大纲知识点梳理, (3-1) 链表-单链表](/gesp/5/syllabus/gesp-5-exam-syllabus-linked-list-1-singly/)
+> * [【GESP】C++五级考试大纲知识点梳理, (3-2) 链表-双向链表](/gesp/5/syllabus/gesp-5-exam-syllabus-linked-list-2-double/)
+> * [【GESP】C++五级考试大纲知识点梳理, (3-3) 链表-单向循环链表](/gesp/5/syllabus/gesp-5-exam-syllabus-3-linked-list-3-singly-circle/)
 
 <!--more-->
 

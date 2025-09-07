@@ -25,7 +25,7 @@ GESP C++五级官方考试大纲中，共有`9`条考点，本文针对第`2`条
 
 > [!Tip]
 >
-> * [【GESP】C++五级考试大纲知识点梳理, (1) 初等数论](https://www.coderli.com/gesp-5-exam-syllabus-elementary-number-theory/)
+> * [【GESP】C++五级考试大纲知识点梳理, (1) 初等数论](/gesp/5/syllabus/gesp-5-exam-syllabus-elementary-number-theory/)
 
 由于本人也是边学、边实验、边总结，且对考纲深度和广度的把握属于个人理解。因此本文更多的不是一个教程，而是个人知识梳理，如有遗漏、疏忽，欢迎指正、交流。
 

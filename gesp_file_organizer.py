@@ -11,22 +11,28 @@ import shutil
 import subprocess
 import sys
 import yaml
+import json
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
 class GESPFileOrganizer:
     """GESP文件分类整理器"""
     
-    def __init__(self, source_dir: str, target_dir: str):
+    def __init__(self, source_dir: str, target_dir: str, use_cache: bool = True):
         """
         初始化文件整理器
         
         Args:
             source_dir: 源目录路径
             target_dir: 目标根目录路径
+            use_cache: 是否使用缓存机制
         """
         self.source_dir = Path(source_dir)
         self.target_dir = Path(target_dir)
+        self.use_cache = use_cache
+        
+        # 缓存文件路径
+        self.cache_file = Path(__file__).parent / ".gesp_file_cache.json"
         
         # 级别映射字典
         self.level_mapping = {
@@ -42,6 +48,65 @@ class GESPFileOrganizer:
             "existed": 0,
             "errors": 0
         }
+        
+        # 加载缓存
+        self.cache = self.load_cache() if use_cache else {}
+    
+    def load_cache(self) -> Dict:
+        """
+        加载缓存文件
+        
+        Returns:
+            缓存数据字典
+        """
+        try:
+            if self.cache_file.exists():
+                with open(self.cache_file, 'r', encoding='utf-8') as f:
+                    cache_data = json.load(f)
+                    print(f"加载缓存文件: {self.cache_file} (共 {len(cache_data.get('existed_files', {}))} 条记录)")
+                    return cache_data
+        except Exception as e:
+            print(f"加载缓存文件失败: {e}")
+        
+        return {"existed_files": {}, "last_update": ""}
+    
+    def save_cache(self) -> None:
+        """
+        保存缓存数据到文件
+        """
+        if not self.use_cache:
+            return
+            
+        try:
+            from datetime import datetime
+            self.cache["last_update"] = datetime.now().isoformat()
+            
+            with open(self.cache_file, 'w', encoding='utf-8') as f:
+                json.dump(self.cache, f, ensure_ascii=False, indent=2)
+            print(f"缓存数据已保存: {self.cache_file}")
+        except Exception as e:
+            print(f"保存缓存文件失败: {e}")
+    
+    def refresh_cache_from_filesystem(self) -> None:
+        """
+        从文件系统刷新缓存
+        """
+        print("刷新缓存：从文件系统扫描已存在文件...")
+        
+        existed_files = {}
+        
+        # 递归扫描目标目录
+        if self.target_dir.exists():
+            for md_file in self.target_dir.rglob("*.md"):
+                filename = md_file.name
+                relative_path = str(md_file.relative_to(self.target_dir))
+                existed_files[filename] = relative_path
+        
+        # 更新缓存
+        self.cache["existed_files"] = existed_files
+        self.save_cache()
+        
+        print(f"缓存刷新完成，共扫描到 {len(existed_files)} 个文件")
     
     def parse_frontmatter(self, content: str) -> Tuple[Optional[Dict], str]:
         """
@@ -151,15 +216,21 @@ class GESPFileOrganizer:
         Returns:
             如果文件存在，返回相对于目标根目录的路径；否则返回None
         """
-        # 在目标根目录下递归查找同名文件
-        for existing_file in self.target_dir.rglob(filename):
-            # 返回相对于目标根目录的路径
-            return str(existing_file.relative_to(self.target_dir))
-        return None
+        if self.use_cache:
+            # 使用缓存查找
+            return self.cache.get("existed_files", {}).get(filename)
+        else:
+            # 直接从文件系统查找
+            for existing_file in self.target_dir.rglob(filename):
+                return str(existing_file.relative_to(self.target_dir))
+            return None
     
-    def run_formatter(self) -> bool:
+    def run_formatter(self, copied_files: List[str] = None) -> bool:
         """
         运行formater.py脚本格式化目标目录中的文件
+        
+        Args:
+            copied_files: 已拷贝文件路径列表，如果提供则只处理这些文件
         
         Returns:
             是否成功执行
@@ -178,24 +249,37 @@ class GESPFileOrganizer:
             print("🛠️  开始运行 formater.py 格式化脚本...")
             print("=" * 60)
             
-            # 构建命令：传递目标目录的相对路径
-            relative_target = self.target_dir.relative_to(script_dir)
-            
-            # 使用subprocess运行脚本，传递目标目录作为参数
+            # 构建命令
             cmd = [sys.executable, str(formatter_script)]
             
-            # 准备输入：目标目录 + 确认执行
-            input_data = f"{relative_target}\ny\n"
-            
-            # 执行脚本
-            result = subprocess.run(
-                cmd,
-                input=input_data,
-                text=True,
-                capture_output=True,
-                cwd=script_dir,
-                encoding='utf-8'
-            )
+            if copied_files:
+                # 如果有指定文件列表，将文件路径作为命令行参数传递
+                cmd.extend(copied_files)
+                print(f"对 {len(copied_files)} 个已拷贝的文件进行格式化...")
+                
+                # 执行脚本（不需要交互输入）
+                result = subprocess.run(
+                    cmd,
+                    capture_output=True,
+                    text=True,
+                    cwd=script_dir,
+                    encoding='utf-8',
+                    errors='replace'  # 添加错误处理
+                )
+            else:
+                # 原始逗辑：传递目标目录 + 确认执行
+                relative_target = self.target_dir.relative_to(script_dir)
+                input_data = f"{relative_target}\ny\n"
+                
+                result = subprocess.run(
+                    cmd,
+                    input=input_data,
+                    text=True,
+                    capture_output=True,
+                    cwd=script_dir,
+                    encoding='utf-8',
+                    errors='replace'  # 添加错误处理
+                )
             
             # 输出结果
             if result.stdout:
@@ -215,92 +299,120 @@ class GESPFileOrganizer:
             print(f"\n❌ 运行formater.py时出错: {e}")
             return False
     
-    def copy_file_to_target(self, source_file: Path, relative_path: str) -> tuple[bool, str]:
+    def analyze_files(self) -> Tuple[Dict[str, List[Tuple[Path, str]]], Dict[str, List[str]]]:
         """
-        将文件拷贝到目标位置
+        分析所有文件，确定拷贝计划和已存在文件
         
-        Args:
-            source_file: 源文件路径
-            relative_path: 相对于目标根目录的路径
-            
         Returns:
-            Tuple[是否成功, 操作类型('copied'|'existed'|'error')]
+            Tuple[copy_plan, existed_files_map]
+            copy_plan: {target_subdir: [(source_file_path, filename), ...]}
+            existed_files_map: {existing_dir: [filename_info, ...]}
         """
-        target_path = self.target_dir / relative_path / source_file.name
+        copy_plan = {}
+        existed_files_map = {}
         
-        # 检查文件是否在目标根路径下的任何位置已存在
-        existing_path = self.check_file_exists_in_target(source_file.name)
-        if existing_path:
-            print(f"⊝ 文件已存在，跳过拷贝: {source_file.name} -> 已存在于 {existing_path}")
-            return True, 'existed'
+        # 遍历源目录中的所有.md文件
+        md_files = list(self.source_dir.rglob("*.md"))
         
-        try:
-            # 创建目标目录
-            target_path.parent.mkdir(parents=True, exist_ok=True)
+        for file_path in md_files:
+            filename = file_path.name
             
-            # 拷贝文件
-            shutil.copy2(source_file, target_path)
+            if not self.is_gesp_file(filename):
+                continue
             
-            print(f"✓ 拷贝成功: {source_file.name} -> {relative_path}/")
-            return True, 'copied'
-            
-        except Exception as e:
-            print(f"✗ 拷贝失败: {source_file.name} - {e}")
-            return False, 'error'
-    
-    def process_file(self, file_path: Path) -> bool:
-        """
-        处理单个文件
-        
-        Args:
-            file_path: 文件路径
-            
-        Returns:
-            是否成功处理
-        """
-        filename = file_path.name
-        
-        # 检查是否为GESP文件
-        if not self.is_gesp_file(filename):
-            print(f"⊝ 跳过非GESP文件: {filename}")
-            self.stats["skipped"] += 1
-            return False
-        
-        try:
-            # 读取文件内容
-            with open(file_path, 'r', encoding='utf-8') as f:
-                content = f.read()
-            
-            # 解析frontmatter
-            frontmatter, body = self.parse_frontmatter(content)
-            if not frontmatter:
-                print(f"⊝ 跳过无frontmatter文件: {filename}")
-                self.stats["skipped"] += 1
-                return False
-            
-            # 确定目标目录
-            target_subdir = self.determine_subdirectory(frontmatter, filename)
-            if not target_subdir:
-                print(f"⊝ 跳过无法分类文件: {filename}")
-                self.stats["skipped"] += 1
-                return False
-            
-            # 拷贝文件
-            success, operation = self.copy_file_to_target(file_path, target_subdir)
-            if success:
-                if operation == 'copied':
-                    self.stats["copied"] += 1
-                elif operation == 'existed':
-                    self.stats["existed"] += 1
-                return True
-            else:
-                self.stats["errors"] += 1
-                return False
+            try:
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    content = f.read()
                 
-        except Exception as e:
-            print(f"✗ 处理文件出错: {filename} - {e}")
-            self.stats["errors"] += 1
-            return False
+                frontmatter, _ = self.parse_frontmatter(content)
+                if not frontmatter:
+                    continue
+                
+                target_subdir = self.determine_subdirectory(frontmatter, filename)
+                if target_subdir:
+                    # 检查文件是否在目标根路径下的任何位置已存在
+                    existing_path = self.check_file_exists_in_target(filename)
+                    
+                    if existing_path:
+                        # 文件已存在，记录到已存在文件映射
+                        existing_dir = str(Path(existing_path).parent) if Path(existing_path).parent != Path('.') else 'root'
+                        if existing_dir not in existed_files_map:
+                            existed_files_map[existing_dir] = []
+                        existed_files_map[existing_dir].append(f"{filename} (存在于: {existing_path})")
+                    else:
+                        # 文件不存在，加入拷贝计划
+                        if target_subdir not in copy_plan:
+                            copy_plan[target_subdir] = []
+                        copy_plan[target_subdir].append((file_path, filename))
+            
+            except Exception as e:
+                print(f"分析文件出错: {filename} - {e}")
+        
+        return copy_plan, existed_files_map
+    
+    def execute_copy_plan(self, copy_plan: Dict[str, List[Tuple[Path, str]]]) -> List[str]:
+        """
+        执行拷贝计划
+        
+        Args:
+            copy_plan: 拷贝计划字典 {target_subdir: [(source_file_path, filename), ...]}
+        
+        Returns:
+            成功拷贝的文件路径列表
+        """
+        total_to_copy = sum(len(files) for files in copy_plan.values())
+        copied_count = 0
+        error_count = 0
+        copied_files = []  # 记录成功拷贝的文件路径
+        
+        print(f"开始执行拷贝计划，共 {total_to_copy} 个文件...")
+        print()
+        
+        for target_subdir, files in copy_plan.items():
+            print(f"📁 拷贝到 {target_subdir}/ ({len(files)} 个文件)")
+            
+            for source_file_path, filename in files:
+                try:
+                    target_path = self.target_dir / target_subdir / filename
+                    
+                    # 创建目标目录
+                    target_path.parent.mkdir(parents=True, exist_ok=True)
+                    
+                    # 拷贝文件
+                    shutil.copy2(source_file_path, target_path)
+                    
+                    print(f"  ✓ {filename}")
+                    copied_count += 1
+                    copied_files.append(str(target_path))  # 记录成功拷贝的文件路径
+                    
+                    # 更新缓存
+                    if self.use_cache:
+                        relative_path = str(target_path.relative_to(self.target_dir))
+                        self.cache["existed_files"][filename] = relative_path
+                    
+                except Exception as e:
+                    print(f"  ✗ {filename} - 拷贝失败: {e}")
+                    error_count += 1
+            
+            print()
+        
+        # 更新统计信息
+        self.stats["copied"] = copied_count
+        self.stats["errors"] = error_count
+        self.stats["processed"] = total_to_copy
+        
+        print("=" * 60)
+        print("文件拷贝完成！统计信息:")
+        print(f"计划拷贝文件: {total_to_copy}")
+        print(f"成功拷贝文件: {copied_count}")
+        print(f"拷贝失败文件: {error_count}")
+        print("=" * 60)
+        
+        # 保存缓存
+        if self.use_cache and copied_count > 0:
+            self.save_cache()
+        
+        return copied_files
     
     def organize_files(self) -> None:
         """执行文件整理"""
@@ -318,42 +430,43 @@ class GESPFileOrganizer:
         # 创建目标根目录
         self.target_dir.mkdir(parents=True, exist_ok=True)
         
-        # 遍历源目录中的所有.md文件
-        md_files = list(self.source_dir.rglob("*.md"))
+        # 分析文件，获取拷贝计划
+        copy_plan, existed_files_map = self.analyze_files()
         
-        if not md_files:
-            print("未找到任何.md文件")
+        total_new_files = sum(len(files) for files in copy_plan.values())
+        total_existed_files = sum(len(files) for files in existed_files_map.values())
+        total_files = total_new_files + total_existed_files
+        
+        if total_files == 0:
+            print("未找到任何GESP文件")
             return
         
-        print(f"找到 {len(md_files)} 个.md文件，开始处理...")
+        print(f"找到 {total_files} 个GESP文件，其中 {total_new_files} 个需要拷贝，{total_existed_files} 个已存在")
+        
+        if total_new_files == 0:
+            print("没有需要拷贝的新文件")
+            self.stats["processed"] = total_files
+            self.stats["existed"] = total_existed_files
+            return
+        
         print()
         
-        # 处理每个文件
-        for file_path in md_files:
-            self.stats["processed"] += 1
-            self.process_file(file_path)
+        # 执行拷贝计划
+        copied_files = self.execute_copy_plan(copy_plan)
         
-        # 输出统计信息
-        print()
-        print("=" * 60)
-        print("文件拷贝完成！统计信息:")
-        print(f"总共处理文件: {self.stats['processed']}")
-        print(f"成功拷贝文件: {self.stats['copied']}")
-        print(f"文件已存在: {self.stats['existed']}")
-        print(f"跳过文件: {self.stats['skipped']}")
-        print(f"错误文件: {self.stats['errors']}")
-        print("=" * 60)
+        # 设置已存在文件的统计
+        self.stats["existed"] = total_existed_files
         
         # 如果有文件被拷贝，自动运行格式化脚本
-        if self.stats['copied'] > 0:
+        if self.stats['copied'] > 0 and copied_files:
             print(f"\n🎯 检测到 {self.stats['copied']} 个文件被成功拷贝，将自动运行格式化脚本...")
             
             # 询问用户是否要运行格式化脚本
-            run_formatter = input("是否要运行 formater.py 格式化拷贝的文件头？(Y/n): ").strip().lower()
+            run_formatter = input("是否要运行 formater.py 格式化拷贝的文件头？(Y/n): ").strip().lower() or "y"
             
             if run_formatter not in ['n', 'no', 'N', 'NO', '否']:
-                # 运行格式化脚本
-                if self.run_formatter():
+                # 运行格式化脚本，传递已拷贝的文件列表
+                if self.run_formatter(copied_files):
                     print("\n🎉 文件拷贝和格式化流程全部完成！")
                 else:
                     print("\n⚠️ 文件拷贝完成，但格式化过程中出现了问题。")
@@ -362,8 +475,8 @@ class GESPFileOrganizer:
         else:
             print("\n💡 没有新文件被拷贝，无需运行格式化脚本。")
     
-    def preview_organization(self) -> None:
-        """预览文件分类结果，不实际拷贝，默认只显示将被拷贝的文件"""
+    def preview_organization(self) -> Tuple[Dict[str, List[Tuple[Path, str]]], Dict[str, List[str]]]:
+        """预览文件分类结果，不实际拷贝，默认只显示将被拷贝的文件。返回拷贝计划供后续执行使用"""
         print("=" * 60)
         print("GESP文件分类预览")
         print("=" * 60)
@@ -373,80 +486,38 @@ class GESPFileOrganizer:
         
         if not self.source_dir.exists():
             print(f"错误: 源目录不存在 - {self.source_dir}")
-            return
+            return {}, {}
         
         # 创建目标根目录（如果不存在）
         self.target_dir.mkdir(parents=True, exist_ok=True)
         
-        # 遍历源目录中的所有.md文件
-        md_files = list(self.source_dir.rglob("*.md"))
+        # 分析文件
+        copy_plan, existed_files_map = self.analyze_files()
         
-        if not md_files:
-            print("未找到任何.md文件")
-            return
+        total_new_files = sum(len(files) for files in copy_plan.values())
+        total_existed_files = sum(len(files) for files in existed_files_map.values())
+        total_files = total_new_files + total_existed_files
         
-        print(f"找到 {len(md_files)} 个.md文件")
+        if total_files == 0:
+            print("未找到任何GESP文件")
+            return {}, {}
+        
+        print(f"找到 {total_files} 个GESP文件")
         print()
         
-        organization_map = {}
-        existed_files_map = {}
-        total_files = 0
-        new_files = 0
-        existed_files = 0
-        
-        # 分析每个文件
-        for file_path in md_files:
-            filename = file_path.name
-            
-            if not self.is_gesp_file(filename):
-                continue
-            
-            total_files += 1
-            
-            try:
-                with open(file_path, 'r', encoding='utf-8') as f:
-                    content = f.read()
-                
-                frontmatter, _ = self.parse_frontmatter(content)
-                if not frontmatter:
-                    continue
-                
-                target_subdir = self.determine_subdirectory(frontmatter, filename)
-                if target_subdir:
-                    # 检查文件是否在目标根路径下的任何位置已存在
-                    existing_path = self.check_file_exists_in_target(filename)
-                    
-                    if existing_path:
-                        # 文件已存在，记录到已存在文件映射
-                        # 使用实际存在的路径作为key
-                        existing_dir = str(Path(existing_path).parent) if Path(existing_path).parent != Path('.') else 'root'
-                        if existing_dir not in existed_files_map:
-                            existed_files_map[existing_dir] = []
-                        existed_files_map[existing_dir].append(f"{filename} (存在于: {existing_path})")
-                        existed_files += 1
-                    else:
-                        # 文件不存在，会被拷贝
-                        if target_subdir not in organization_map:
-                            organization_map[target_subdir] = []
-                        organization_map[target_subdir].append(filename)
-                        new_files += 1
-            
-            except Exception as e:
-                print(f"分析文件出错: {filename} - {e}")
-        
         # 输出预览结果 - 默认只显示将被拷贝的文件
-        if organization_map:
-            print("📝 将被拷贝的新文件:")
-            for subdir, files in sorted(organization_map.items()):
+        if copy_plan:
+            print(f"📝 将被拷贝的新文件 ({total_new_files} 个):")
+            for subdir, files in sorted(copy_plan.items()):
                 print(f"\n📁 {subdir}/ ({len(files)} 个新文件)")
-                for filename in sorted(files):
+                for file_path, filename in sorted(files, key=lambda x: x[1]):
                     print(f"  ✓ {filename}")
         else:
             print("🚀 没有需要拷贝的新文件")
         
         # 询问用户是否需要查看已存在的文件
         if existed_files_map:
-            print(f"\n🔍 发现 {existed_files} 个已存在的文件（将被跳过）")
+            print(f"\n🔍 发现 {total_existed_files} 个已存在的文件（将被跳过）")
             show_existed = input("是否需要查看已存在文件的详细信息？(y/N): ").strip().lower()
             
             if show_existed in ['y', 'yes', 'Y', 'YES', '是', 'y', 'Y']:
@@ -458,8 +529,10 @@ class GESPFileOrganizer:
         
         print(f"\n📊 统计信息:")
         print(f"总共GESP文件: {total_files}")
-        print(f"将被拷贝: {new_files}")
-        print(f"已存在（跳过）: {existed_files}")
+        print(f"将被拷贝: {total_new_files}")
+        print(f"已存在（跳过）: {total_existed_files}")
+        
+        return copy_plan, existed_files_map
 
 
 def main():
@@ -488,36 +561,91 @@ def main():
     # 创建整理器
     organizer = GESPFileOrganizer(source_dir, target_dir)
     
+    # 缓存选项
+    print("\n缓存设置:")
+    print("1. 使用缓存（推荐，提高性能）")
+    print("2. 刷新缓存并使用")
+    print("3. 不使用缓存（直接扫描文件系统）")
+    
+    cache_choice = input("请选择缓存模式 (1/2/3, 默认1): ").strip() or "1"
+    
+    if cache_choice == "2":
+        organizer.refresh_cache_from_filesystem()
+    elif cache_choice == "3":
+        organizer.use_cache = False
+        print("已禁用缓存，将直接扫描文件系统")
+    else:
+        print(f"使用缓存模式（缓存文件: {organizer.cache_file}）")
+    
     # 选择操作模式
     print("\n请选择操作模式:")
-    print("1. 仅预览分类结果（不执行拷贝）")
-    print("2. 预览后询问是否执行拷贝")
-    print("3. 直接执行文件拷贝")
+    print("1. 直接执行文件拷贝（默认）")
+    print("2. 预览后再执行拷贝")
     
-    choice = input("请输入选择 (1/2/3): ").strip()
+    choice = input("请输入选择 (1/2, 默认1): ").strip() or "1"
     
     if choice == "1":
-        # 仅预览，不询问是否执行
-        organizer.preview_organization()
+        # 直接执行拷贝
+        organizer.organize_files()
     elif choice == "2":
         # 预览后询问是否执行
-        organizer.preview_organization()
+        copy_plan, existed_files_map = organizer.analyze_files()
         
-        print("\n" + "=" * 60)
-        execute = input("🚀 是否要执行上述文件拷贝操作？(Y/n): ").strip().lower()
+        total_new_files = sum(len(files) for files in copy_plan.values())
+        total_existed_files = sum(len(files) for files in existed_files_map.values())
+        total_files = total_new_files + total_existed_files
         
-        if execute not in ['n', 'no', 'N', 'NO', '否']:
-            print("\n开始执行文件拷贝...")
-            organizer.organize_files()
+        if total_files == 0:
+            print("未找到任何GESP文件")
+            return
+        
+        print(f"找到 {total_files} 个GESP文件")
+        print()
+        
+        # 输出预览结果
+        if copy_plan:
+            print(f"📝 将被拷贝的新文件 ({total_new_files} 个):")
+            for subdir, files in sorted(copy_plan.items()):
+                print(f"\n📁 {subdir}/ ({len(files)} 个新文件)")
+                for file_path, filename in sorted(files, key=lambda x: x[1]):
+                    print(f"  ✓ {filename}")
         else:
-            print("✅ 操作已取消，仅完成预览。")
-    elif choice == "3":
-        # 直接执行拷贝，带确认
-        confirm = input("确认要直接执行文件拷贝吗？(y/N): ").strip().lower()
-        if confirm in ['y', 'yes', 'Y', 'YES', '是']:
-            organizer.organize_files()
+            print("🚀 没有需要拷贝的新文件")
+        
+        print(f"\n📊 统计信息:")
+        print(f"总共GESP文件: {total_files}")
+        print(f"将被拷贝: {total_new_files}")
+        print(f"已存在（跳过）: {total_existed_files}")
+        
+        if total_new_files > 0:
+            print("\n" + "=" * 60)
+            execute = input("🚀 是否要执行上述文件拷贝操作？(Y/n): ").strip().lower() or "y"
+            
+            if execute not in ['n', 'no', 'N', 'NO', '否']:
+                print("\n开始执行文件拷贝...")
+                copied_files = organizer.execute_copy_plan(copy_plan)
+                
+                organizer.stats["existed"] = total_existed_files
+                
+                # 自动运行格式化脚本
+                if organizer.stats['copied'] > 0 and copied_files:
+                    print(f"\n🎯 检测到 {organizer.stats['copied']} 个文件被成功拷贝，将自动运行格式化脚本...")
+                    
+                    run_formatter = input("是否要运行 formater.py 格式化拷贝的文件头？(Y/n): ").strip().lower() or "y"
+                    
+                    if run_formatter not in ['n', 'no', 'N', 'NO', '否']:
+                        if organizer.run_formatter(copied_files):
+                            print("\n🎉 文件拷贝和格式化流程全部完成！")
+                        else:
+                            print("\n⚠️ 文件拷贝完成，但格式化过程中出现了问题。")
+                    else:
+                        print("\n✅ 文件拷贝完成（跳过格式化）。")
+                else:
+                    print("\n💡 没有新文件被拷贝，无需运行格式化脚本。")
+            else:
+                print("✅ 操作已取消，仅完成预览。")
         else:
-            print("操作已取消")
+            print("\n💡 没有需要拷贝的新文件，无需执行拷贝操作。")
     else:
         print("无效选择")
 

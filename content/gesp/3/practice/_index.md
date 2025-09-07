@@ -7,4 +7,6 @@ sidebar:
   open: true
 ---
 
-GESP C++ 三级练习题清单。
+**详见左侧菜单清单。**
+
+[GESP三级练习题清单-Github版欢迎补充](https://github.com/lihongzheshuai/yummy-code/blob/master/GESP3.md)

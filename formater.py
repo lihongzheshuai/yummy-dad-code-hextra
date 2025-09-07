@@ -1,10 +1,11 @@
 import os
 import re
-import os
+import sys
 from datetime import datetime
 import yaml
 from pathlib import Path
 from collections import defaultdict
+from typing import Optional
 
 def parse_frontmatter(content):
     """解析Markdown文件的frontmatter"""
@@ -42,6 +43,29 @@ def format_frontmatter(frontmatter):
     yaml_str = yaml.dump(ordered_frontmatter, default_flow_style=False, allow_unicode=True, sort_keys=False)
     return yaml_str.rstrip()
 
+def extract_first_h2_title(body: str) -> Optional[str]:
+    """
+    提取Markdown文档中的第一个二级标题内容
+    
+    Args:
+        body: Markdown文档主体内容
+        
+    Returns:
+        第一个二级标题的内容，去除标记符号和多余空格
+    """
+    if not body:
+        return None
+    
+    # 匹配第一个二级标题
+    match = re.search(r'^##\s+(.+?)$', body, re.MULTILINE)
+    if match:
+        title = match.group(1).strip()
+        # 去除可能的额外标记符号
+        title = re.sub(r'[#\s]+$', '', title).strip()
+        return title if title else None
+    
+    return None
+
 def clean_title(title):
     """清理title中的GESP前缀"""
     if not title:
@@ -59,6 +83,26 @@ def clean_title(title):
         title = re.sub(pattern, '', title)
     
     return title.strip()
+
+def determine_file_folder_type(filepath: str) -> str:
+    """
+    根据文件路径判断文件所在的文件夹类型
+    
+    Args:
+        filepath: 文件路径
+        
+    Returns:
+        文件夹类型: 'syllabus', 'practice', 'other'
+    """
+    path_parts = Path(filepath).parts
+    
+    for part in path_parts:
+        if 'syllabus' in part.lower():
+            return 'syllabus'
+        elif 'practice' in part.lower():
+            return 'practice'
+    
+    return 'other'
 
 def extract_slug_from_filename(filename):
     # 匹配格式：yyyy-MM-dd-...
@@ -132,15 +176,208 @@ def collect_files_by_directory(root_path):
     
     return files_by_dir
 
-def assign_weights_by_date(files_info):
-    """根据日期为文件分配weight，日期最早的weight=1"""
+def assign_weights_by_date(files_info, target_dir_path: str):
+    """根据日期为文件分配weight，在目标文件夹最大weight基础上自增"""
+    # 获取目标文件夹中已存在文件的最大weight
+    max_existing_weight = get_max_weight_in_directory(target_dir_path)
+    
     # 按日期排序，日期相同则按文件名排序
     sorted_files = sorted(files_info, key=lambda x: (x[3], x[0]))  # x[3]是解析后的日期，x[0]是文件名
     
     for i, file_info in enumerate(sorted_files, 1):
-        file_info[2]['weight'] = i  # 设置weight从1开始
+        file_info[2]['weight'] = max_existing_weight + i  # 在已存在最大weight基础上自增
     
     return sorted_files
+
+def get_max_weight_in_directory(directory_path: str) -> int:
+    """
+    获取目标文件夹中已存在文件的最大weight值
+    
+    Args:
+        directory_path: 目标文件夹路径
+        
+    Returns:
+        最大weight值，如果没有文件则返回0
+    """
+    max_weight = 0
+    directory = Path(directory_path)
+    
+    if not directory.exists():
+        return 0
+    
+    # 遍历目标文件夹中的所有md文件
+    for md_file in directory.glob("*.md"):
+        try:
+            content, _ = read_file_with_encoding(str(md_file))
+            frontmatter, _ = parse_frontmatter(content)
+            
+            if frontmatter and 'weight' in frontmatter:
+                weight = frontmatter['weight']
+                if isinstance(weight, int) and weight > max_weight:
+                    max_weight = weight
+        except Exception:
+            # 忽略读取错误的文件
+            continue
+    
+    return max_weight
+
+def read_file_with_encoding(filepath):
+    """尝试用多种编码读取文件"""
+    encodings = ['utf-8', 'utf-8-sig', 'gbk', 'gb2312', 'latin-1', 'cp1252']
+    
+    for encoding in encodings:
+        try:
+            with open(filepath, 'r', encoding=encoding) as f:
+                content = f.read()
+                print(f"  成功用 {encoding} 编码读取文件")
+                return content, encoding
+        except UnicodeDecodeError:
+            continue
+        except Exception as e:
+            print(f"  用 {encoding} 编码读取时出现其他错误: {e}")
+            continue
+    
+    # 如果所有编码都失败，尝试用二进制模式读取并替换无效字符
+    try:
+        with open(filepath, 'rb') as f:
+            raw_content = f.read()
+            content = raw_content.decode('utf-8', errors='replace')
+            print(f"  警告：使用UTF-8编码并替换无效字符读取文件")
+            return content, 'utf-8-with-errors'
+    except Exception as e:
+        raise Exception(f"无法读取文件 {filepath}: {e}")
+
+def process_specific_files(file_paths):
+    """
+    处理指定的Markdown文件列表
+    
+    Args:
+        file_paths: 文件路径列表
+    """
+    if not file_paths:
+        print("没有指定要处理的文件")
+        return
+    
+    print("=" * 60)
+    print("处理指定文件的frontmatter格式化")
+    print("=" * 60)
+    
+    total_processed = 0
+    total_updated = 0
+    
+    for filepath in file_paths:
+        filepath = Path(filepath)
+        
+        if not filepath.exists():
+            print(f"文件不存在，跳过: {filepath}")
+            continue
+            
+        if not filepath.suffix.lower() == '.md':
+            print(f"非Markdown文件，跳过: {filepath}")
+            continue
+        
+        try:
+            content, used_encoding = read_file_with_encoding(str(filepath))
+            
+            frontmatter, body = parse_frontmatter(content)
+            if frontmatter is None:
+                print(f"跳过文件 {filepath.name}: 无法解析frontmatter")
+                continue
+            
+            total_processed += 1
+            updated = False
+            
+            print(f"处理文件: {filepath.name}")
+            
+            # 1. 修改date格式
+            if 'date' in frontmatter:
+                new_date = convert_date_format(frontmatter['date'])
+                if new_date and new_date != frontmatter['date']:
+                    frontmatter['date'] = new_date
+                    print(f"  更新date: {new_date}")
+                    updated = True
+            
+            # 2. 根据文件夹类型处理title字段
+            folder_type = determine_file_folder_type(str(filepath))
+            
+            if 'title' in frontmatter:
+                if folder_type == 'syllabus':
+                    # syllabus文件夹：清理GESP前缀
+                    original_title = frontmatter['title']
+                    cleaned_title = clean_title(original_title)
+                    if cleaned_title != original_title:
+                        frontmatter['title'] = cleaned_title
+                        print(f"  更新title(清理GESP前缀): {original_title} -> {cleaned_title}")
+                        updated = True
+                elif folder_type == 'practice':
+                    # practice文件夹：使用第一个二级标题
+                    h2_title = extract_first_h2_title(body)
+                    if h2_title and h2_title != frontmatter['title']:
+                        original_title = frontmatter['title']
+                        frontmatter['title'] = h2_title
+                        print(f"  更新title(使用二级标题): {original_title} -> {h2_title}")
+                        updated = True
+                # 其他文件夹：保持原样
+            
+            # 3. 添加或更新slug字段
+            slug = extract_slug_from_filename(filepath.name)
+            if 'slug' not in frontmatter or frontmatter['slug'] != slug:
+                frontmatter['slug'] = slug
+                print(f"  设置slug: {slug}")
+                updated = True
+            
+            # 4. 添加或更新type字段
+            if 'type' not in frontmatter or frontmatter['type'] != 'docs':
+                frontmatter['type'] = 'docs'
+                print(f"  设置type: docs")
+                updated = True
+            
+            # 5. 设置weight（根据目标文件夹中的最大weight+1）
+            if 'weight' not in frontmatter:
+                target_dir = filepath.parent
+                max_weight = get_max_weight_in_directory(str(target_dir))
+                new_weight = max_weight + 1
+                frontmatter['weight'] = new_weight
+                print(f"  设置weight: {new_weight} (目标文件夹最大weight: {max_weight})")
+                updated = True
+            
+            # 如果有更新，写入文件
+            if updated:
+                # 格式化frontmatter
+                formatted_frontmatter = format_frontmatter(frontmatter)
+                
+                # 重新构建文件内容
+                new_content = f"---\n{formatted_frontmatter}\n---\n{body}"
+                
+                # 写入文件，优先使用UTF-8编码
+                try:
+                    with open(filepath, 'w', encoding='utf-8') as f:
+                        f.write(new_content)
+                    print(f"  ✓ 文件更新成功（UTF-8编码）")
+                    total_updated += 1
+                except UnicodeEncodeError:
+                    # 如果UTF-8编码失败，尝试原始编码
+                    try:
+                        with open(filepath, 'w', encoding=used_encoding if used_encoding != 'utf-8-with-errors' else 'utf-8') as f:
+                            f.write(new_content)
+                        print(f"  ✓ 文件更新成功（{used_encoding}编码）")
+                        total_updated += 1
+                    except Exception as e:
+                        print(f"  ✗ 写入文件时出错: {e}")
+                except Exception as e:
+                    print(f"  ✗ 写入文件时出错: {e}")
+            else:
+                print(f"  - 文件无需更新")
+                
+        except Exception as e:
+            print(f"处理文件 {filepath.name} 时出错: {e}")
+            continue
+    
+    print("=" * 60)
+    print(f"指定文件处理完成！")
+    print(f"总计处理文件: {total_processed}")
+    print(f"更新文件: {total_updated}")
+    print("=" * 60)
 
 def process_markdown_files(root_path):
     """递归处理指定根目录下的所有Markdown文件"""
@@ -168,8 +405,7 @@ def process_markdown_files(root_path):
         
         for filename, filepath in files:
             try:
-                with open(filepath, 'r', encoding='utf-8') as f:
-                    content = f.read()
+                content, used_encoding = read_file_with_encoding(filepath)
                 
                 frontmatter, body = parse_frontmatter(content)
                 if frontmatter is None:
@@ -179,7 +415,7 @@ def process_markdown_files(root_path):
                 # 解析日期用于排序
                 date_obj = parse_date_for_sorting(frontmatter.get('date', ''))
                 
-                files_info.append([filename, filepath, frontmatter, date_obj, body])
+                files_info.append([filename, filepath, frontmatter, date_obj, body, used_encoding])
                 
             except Exception as e:
                 print(f"读取文件 {filename} 时出错: {e}")
@@ -190,11 +426,12 @@ def process_markdown_files(root_path):
             continue
         
         # 按日期排序并分配weight
-        sorted_files = assign_weights_by_date(files_info)
+        target_dir_path = os.path.join(root_path, rel_dir)
+        sorted_files = assign_weights_by_date(files_info, target_dir_path)
         
         # 处理每个文件
         dir_updated = 0
-        for filename, filepath, frontmatter, date_obj, body in sorted_files:
+        for filename, filepath, frontmatter, date_obj, body, used_encoding in sorted_files:
             total_processed += 1
             updated = False
             
@@ -241,13 +478,23 @@ def process_markdown_files(root_path):
                 # 重新构建文件内容
                 new_content = f"---\n{formatted_frontmatter}\n---\n{body}"
                 
-                # 写入文件
+                # 写入文件，优先使用UTF-8编码
                 try:
                     with open(filepath, 'w', encoding='utf-8') as f:
                         f.write(new_content)
-                    print(f"  ✓ 文件更新成功")
+                    print(f"  ✓ 文件更新成功（UTF-8编码）")
                     dir_updated += 1
                     total_updated += 1
+                except UnicodeEncodeError:
+                    # 如果UTF-8编码失败，尝试原始编码
+                    try:
+                        with open(filepath, 'w', encoding=used_encoding if used_encoding != 'utf-8-with-errors' else 'utf-8') as f:
+                            f.write(new_content)
+                        print(f"  ✓ 文件更新成功（{used_encoding}编码）")
+                        dir_updated += 1
+                        total_updated += 1
+                    except Exception as e:
+                        print(f"  ✗ 写入文件时出错: {e}")
                 except Exception as e:
                     print(f"  ✗ 写入文件时出错: {e}")
             else:
@@ -259,6 +506,14 @@ def process_markdown_files(root_path):
 
 def main():
     """主函数"""
+    # 检查是否有命令行参数
+    if len(sys.argv) > 1:
+        # 如果有参数，将其作为文件路径列表处理
+        file_paths = sys.argv[1:]
+        print(f"接收到 {len(file_paths)} 个文件路径参数")
+        process_specific_files(file_paths)
+        return
+    
     print("======================================")
     print("Markdown文件frontmatter格式化工具")
     print("======================================")

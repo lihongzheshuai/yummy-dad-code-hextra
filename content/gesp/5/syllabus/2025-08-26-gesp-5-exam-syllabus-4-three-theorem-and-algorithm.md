@@ -18,21 +18,23 @@ math: true
 mermaid: true
 ---
 GESP C++五级官方考试大纲中，共有`9`条考点，本文针对第`4`条考点进行分析介绍。
+> [!Important]
 > （4）掌握辗转相除法（也称欧几里得算法）、素数表的埃氏筛法和线性筛法、唯一分解定理的原理和应用。
-{: .prompt-info}
 
+> [!Warning]
 > 本人也是边学、边实验、边总结，且对考纲深度和广度的把握属于个人理解。因此本文更多的不是一个教程，而是个人知识梳理，如有遗漏、疏忽，欢迎指正、交流。
 {: .prompt-warning}
 
 ***五级其他考点回顾：***
 
+> [!Tip]
+>
 > * [【GESP】C++五级考试大纲知识点梳理, (1) 初等数论](https://www.coderli.com/gesp-5-exam-syllabus-elementary-number-theory/)
 > * [【GESP】C++五级考试大纲知识点梳理, (2) 模拟高精度计算](https://www.coderli.com/gesp-5-exam-syllabus-simulate-high-precision-arithmetic/)
 > * [【GESP】C++五级考试大纲知识点梳理, (3-1) 链表-单链表](https://www.coderli.com/gesp-5-exam-syllabus-linked-list-1-singly/)
 > * [【GESP】C++五级考试大纲知识点梳理, (3-2) 链表-双向链表](https://www.coderli.com/gesp-5-exam-syllabus-linked-list-2-double/)
 > * [【GESP】C++五级考试大纲知识点梳理, (3-3) 链表-单向循环链表](https://www.coderli.com/gesp-5-exam-syllabus-3-linked-list-3-singly-circle/)
 > * [【GESP】C++五级考试大纲知识点梳理, (3-4) 链表-双向循环链表](https://www.coderli.com/gesp-5-exam-syllabus-3-linked-list-4-double-circle/)
-{: .prompt-tip}
 
 <!--more-->
 
@@ -354,7 +356,6 @@ void linear_sieve(int n) {
 
 ---
 
-
 ## 四、唯一分解定理
 
 ### 4.1 背景
@@ -468,4 +469,3 @@ $$
 可以验证：$360 \times 1200 = \gcd(360, 1200) \times \mathrm{lcm}(360, 1200)$
 
 ---
-

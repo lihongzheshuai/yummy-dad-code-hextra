@@ -18,20 +18,21 @@ math: true
 mermaid: true
 ---
 GESP C++五级官方考试大纲中，共有`9`条考点，本文针对第`3`条考点进行分析介绍。
+> [!Important]
 > （3）掌握链表的创建、插入、删除、遍历和反转操作，理解单链表、双链表、循环链表的区别。
-{: .prompt-info}
 
 由于内容比较多，且涉及到代码的编写和验证，本知识点将分单链表、双链表、循环链表3次进行介绍。
 
+> [!Warning]
 > 本人也是边学、边实验、边总结，且对考纲深度和广度的把握属于个人理解。因此本文更多的不是一个教程，而是个人知识梳理，如有遗漏、疏忽，欢迎指正、交流。
-{: .prompt-warning}
 
 ***五级其他考点回顾：***
 
+> [!Tip]
+>
 > * [【GESP】C++五级考试大纲知识点梳理, (1) 初等数论](https://www.coderli.com/gesp-5-exam-syllabus-elementary-number-theory/)
 > * [【GESP】C++五级考试大纲知识点梳理, (2) 模拟高精度计算](https://www.coderli.com/gesp-5-exam-syllabus-simulate-high-precision-arithmetic/)
 > * [【GESP】C++五级考试大纲知识点梳理, (3-1) 链表-单链表](https://www.coderli.com/gesp-5-exam-syllabus-linked-list-1-singly/)
-{: .prompt-tip}
 
 <!--more-->
 
@@ -434,8 +435,6 @@ DNode* reverseDList(DNode* head) {
 
 ---
 
-
-
 ## 三、总结
 
 * 双向链表的**插入/删除**在已知节点指针的情况下可 $O(1)$ 完成，查找仍为 $O(n)$。
@@ -549,5 +548,3 @@ int main() {
 ```
 
 ---
-
-

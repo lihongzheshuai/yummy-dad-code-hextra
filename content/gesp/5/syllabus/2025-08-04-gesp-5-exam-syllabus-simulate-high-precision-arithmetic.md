@@ -18,13 +18,14 @@ math: true
 mermaid: true
 ---
 GESP C++五级官方考试大纲中，共有`9`条考点，本文针对第`2`条考点进行分析介绍。
+> [!Important]
 > （2）掌握 C++数组模拟高精度加法、减法、乘法和除法的相关知识。
-{: .prompt-info}
 
 ***五级其他考点回顾：***
 
+> [!Tip]
+>
 > * [【GESP】C++五级考试大纲知识点梳理, (1) 初等数论](https://www.coderli.com/gesp-5-exam-syllabus-elementary-number-theory/)
-{: .prompt-tip}
 
 由于本人也是边学、边实验、边总结，且对考纲深度和广度的把握属于个人理解。因此本文更多的不是一个教程，而是个人知识梳理，如有遗漏、疏忽，欢迎指正、交流。
 
@@ -234,8 +235,6 @@ int main() {
     return 0;
 }
 ```
-
-
 
 ---
 
@@ -660,4 +659,3 @@ int main() {
 | 除法 | 高位逐位除     | $O(n)$  |
 
 ---
-

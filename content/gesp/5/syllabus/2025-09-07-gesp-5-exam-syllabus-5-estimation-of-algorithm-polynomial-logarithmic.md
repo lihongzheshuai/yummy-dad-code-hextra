@@ -218,4 +218,3 @@ void heapSort(int a[], int n) {
 > * **对数复杂度** → “规模减半 + 分治递归”，典型是高效排序（快排、归并、堆排序）。
 
 ---
-{% include custom/custom-post-content-footer.md %}

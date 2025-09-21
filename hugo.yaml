@@ -58,6 +58,10 @@ menu:
       pageRef: /gesp/5
       weight: 5
       parent: GESP
+    - name: 编程必备武器库
+      pageRef: /gesp/arsenal
+      weight: 6
+      parent: GESP
     - name: 投资
       pageRef: /invest
       weight: 2

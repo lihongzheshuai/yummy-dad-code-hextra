@@ -166,6 +166,11 @@ class GESPFileOrganizer:
         title = frontmatter.get('title', '')
         categories = frontmatter.get('categories', [])
         
+        # 检查是否为必备技能文章（优先处理，不需要级别分类）
+        for category in categories:
+            if '必备技能' in str(category):
+                return 'arsenal'
+        
         # 提取级别
         level = self.extract_level_from_categories(categories)
         if not level:

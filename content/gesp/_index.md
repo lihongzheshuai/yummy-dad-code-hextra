@@ -10,8 +10,18 @@ CCF(中国计算机学会), [GESP(CCF编程能力等级认证)](https://gesp.ccf
 本站整理的学习材料，均为本人在带孩子学习GESP C++认证考试过程中亲自收集、整理。其中：
 
 - 考纲知识介绍，为本人按照GESP考试大纲要求，理解、查阅并验证整理。
-- 真题解析介绍，为本人亲自编写代码并验证通过(AC)的历年真题，思路可能不是最佳，但自己对自己的理解一定最深，欢迎交流、探讨。(【C++、GESP/CSP学习交流QQ群】：[688906745](https://qm.qq.com/q/kJZQQiRMSk)
+- 真题解析介绍，为本人亲自编写代码并验证通过(AC)的历年真题，思路可能不是最佳，但自己对自己的理解一定最深，欢迎交流、探讨。(【C++、GESP/CSP学习交流QQ群】：[688906745](https://qm.qq.com/q/kJZQQiRMSk))
 - 各级练习题清单：均为本人带孩子亲自练习通过的题，不一定最合理，但至少能让我的孩子通过对应等级考试。
+
+{{< cards >}}
+  {{< card link="gesp-config-g-/" title="基础准备" icon="book-open" >}}
+  {{< card link="1" title="一级" icon="book-open" >}}
+  {{< card link="2" title="二级" icon="book-open" >}}
+  {{< card link="3" title="三级" icon="book-open" >}}
+  {{< card link="4" title="四级" icon="book-open" >}}
+  {{< card link="5" title="五级" icon="book-open" >}}
+  {{< card link="arsenal" title="编程必备武器库" icon="book-open" >}}
+{{< /cards >}}
 
 ## 【亲子编程GESP】微信公众号
 

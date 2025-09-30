@@ -1,6 +1,9 @@
 ---
 title: 投资 理财？
-type: docs
+sidebar:
+  open: true
 ---
 
-边学边投，致富之路。
+{{< cards >}}
+  {{< card link="industry" title="行业研究" icon="book-open" >}}
+{{< /cards >}}

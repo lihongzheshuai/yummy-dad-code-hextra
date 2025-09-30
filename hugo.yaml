@@ -65,6 +65,10 @@ menu:
     - name: 投资
       pageRef: /invest
       weight: 2
+    - name: 行业研究
+      pageRef: /invest/industry
+      weight: 3
+      parent: 投资
     - name: Blog ↗
       url: "https://www.coderli.com/"
       weight: 3

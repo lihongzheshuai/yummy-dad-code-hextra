@@ -386,7 +386,7 @@ class GESPFileOrganizer:
                     # 拷贝文件
                     shutil.copy2(source_file_path, target_path)
                     
-                    print(f"  ✓ {filename}")
+                    print(f"  [OK] {filename}")
                     copied_count += 1
                     copied_files.append(str(target_path))  # 记录成功拷贝的文件路径
                     
@@ -396,7 +396,7 @@ class GESPFileOrganizer:
                         self.cache["existed_files"][filename] = relative_path
                     
                 except Exception as e:
-                    print(f"  ✗ {filename} - 拷贝失败: {e}")
+                    print(f"  [ERROR] {filename} - 拷贝失败: {e}")
                     error_count += 1
             
             print()
@@ -516,7 +516,7 @@ class GESPFileOrganizer:
             for subdir, files in sorted(copy_plan.items()):
                 print(f"\n📁 {subdir}/ ({len(files)} 个新文件)")
                 for file_path, filename in sorted(files, key=lambda x: x[1]):
-                    print(f"  ✓ {filename}")
+                    print(f"  [OK] {filename}")
         else:
             print("🚀 没有需要拷贝的新文件")
         
@@ -613,7 +613,7 @@ def main():
             for subdir, files in sorted(copy_plan.items()):
                 print(f"\n📁 {subdir}/ ({len(files)} 个新文件)")
                 for file_path, filename in sorted(files, key=lambda x: x[1]):
-                    print(f"  ✓ {filename}")
+                    print(f"  [OK] {filename}")
         else:
             print("🚀 没有需要拷贝的新文件")
         

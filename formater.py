@@ -353,19 +353,19 @@ def process_specific_files(file_paths):
                 try:
                     with open(filepath, 'w', encoding='utf-8') as f:
                         f.write(new_content)
-                    print(f"  ✓ 文件更新成功（UTF-8编码）")
+                    print(f"  [OK] 文件更新成功（UTF-8编码）")
                     total_updated += 1
                 except UnicodeEncodeError:
                     # 如果UTF-8编码失败，尝试原始编码
                     try:
                         with open(filepath, 'w', encoding=used_encoding if used_encoding != 'utf-8-with-errors' else 'utf-8') as f:
                             f.write(new_content)
-                        print(f"  ✓ 文件更新成功（{used_encoding}编码）")
+                        print(f"  [OK] 文件更新成功（{used_encoding}编码）")
                         total_updated += 1
                     except Exception as e:
-                        print(f"  ✗ 写入文件时出错: {e}")
+                        print(f"  [ERROR] 写入文件时出错: {e}")
                 except Exception as e:
-                    print(f"  ✗ 写入文件时出错: {e}")
+                    print(f"  [ERROR] 写入文件时出错: {e}")
             else:
                 print(f"  - 文件无需更新")
                 
@@ -482,7 +482,7 @@ def process_markdown_files(root_path):
                 try:
                     with open(filepath, 'w', encoding='utf-8') as f:
                         f.write(new_content)
-                    print(f"  ✓ 文件更新成功（UTF-8编码）")
+                    print(f"  [OK] 文件更新成功（UTF-8编码）")
                     dir_updated += 1
                     total_updated += 1
                 except UnicodeEncodeError:
@@ -490,13 +490,13 @@ def process_markdown_files(root_path):
                     try:
                         with open(filepath, 'w', encoding=used_encoding if used_encoding != 'utf-8-with-errors' else 'utf-8') as f:
                             f.write(new_content)
-                        print(f"  ✓ 文件更新成功（{used_encoding}编码）")
+                        print(f"  [OK] 文件更新成功（{used_encoding}编码）")
                         dir_updated += 1
                         total_updated += 1
                     except Exception as e:
-                        print(f"  ✗ 写入文件时出错: {e}")
+                        print(f"  [ERROR] 写入文件时出错: {e}")
                 except Exception as e:
-                    print(f"  ✗ 写入文件时出错: {e}")
+                    print(f"  [ERROR] 写入文件时出错: {e}")
             else:
                 print(f"  - 文件无需更新")
         

@@ -18,14 +18,16 @@ math: true
 mermaid: true
 ---
 GESP C++五级官方考试大纲中，共有`9`条考点，本文针对第`7`条考点进行分析介绍。
+> [!Important]
 > （7）掌握递归算法的基本原理，能够应用递归解决问题，能够分析递归算法的时间复杂度和空间复杂度，了解递归的优化策略。
-{: .prompt-info}
 
+> [!Warning]
 > 本人也是边学、边实验、边总结，且对考纲深度和广度的把握属于个人理解。因此本文更多的不是一个教程，而是个人知识梳理，如有遗漏、疏忽，欢迎指正、交流。
-{: .prompt-warning}
 
 ***五级其他考点回顾：***
 
+> [!Tip]
+>
 > * [【GESP】C++五级考试大纲知识点梳理, (1) 初等数论](https://www.coderli.com/gesp-5-exam-syllabus-elementary-number-theory/)
 > * [【GESP】C++五级考试大纲知识点梳理, (2) 模拟高精度计算](https://www.coderli.com/gesp-5-exam-syllabus-simulate-high-precision-arithmetic/)
 > * [【GESP】C++五级考试大纲知识点梳理, (3-1) 链表-单链表](https://www.coderli.com/gesp-5-exam-syllabus-linked-list-1-singly/)
@@ -35,12 +37,13 @@ GESP C++五级官方考试大纲中，共有`9`条考点，本文针对第`7`条
 > * [【GESP】C++五级考试大纲知识点梳理, (4) 辗转相除法、素数表和唯一性定理](https://www.coderli.com/gesp-5-exam-syllabus-4-three-theorem-and-algorithm/)
 > * [【GESP】C++五级考试大纲知识点梳理, (5) 算法复杂度估算（多项式、对数）](https://www.coderli.com/gesp-5-exam-syllabus-5-estimation-of-algorithm-polynomial-logarithmic/)
 > * [【GESP】C++五级考试大纲知识点梳理, (6) 二分查找和二分答案](https://www.coderli.com/gesp-5-exam-syllabus-6-binary-search/)
-{: .prompt-tip}
 
 <!--more-->
 
 ---
 
+> [!Tip]
+>
 >在梳理的过程中，我发现想尽可能说清楚考纲要求的内容，越总结篇幅越长，为了避免总结遗漏和阅读匹配，我计算分三次介绍本部分内容，即：
 >
 > 1. 递归算法基本原理和常见形式
@@ -48,7 +51,6 @@ GESP C++五级官方考试大纲中，共有`9`条考点，本文针对第`7`条
 > 3. 递归算法优化策略
 >
 > 本次为第一部分介绍。
-{: .prompt-info}
 
 在计算机科学中，递归算法常被称作“解决问题的艺术”。它的核心思想是：**用同类问题的更小规模去解释和解决原问题**。换句话说，递归就是“自己调用自己”，直到问题被分解到足够简单为止。
 
@@ -88,8 +90,9 @@ long long fact(int n) {
 
 ## 二、常见递归模式
 
+> [!Tip]
+>
 >本部分涉及5种常见递归模式，前3种相对比较容易理解，后2种相对比较复杂。暂不理解执行过程我认为也不必太过纠结，可通过后续的编程练习我们一起逐步理解、加深。
-{: .prompt-tip}
 
 ### 2.1 线性递归（Linear Recursion）
 
@@ -280,8 +283,9 @@ long long factorialTail(int n, long long acc = 1) {
 }
 ```
 
+> [!Tip]
+>
 >注：C++ 标准并不保证尾递归优化（TCO），但尾递归写法可轻松转化为迭代。
-{: .prompt-tip}
 
 **调用过程：**
 
@@ -306,4 +310,3 @@ factorialTail(4, 1)
 * 尾递归 → 类似循环，参数不断更新。
 
 ---
-{% include custom/custom-post-content-footer.md %}

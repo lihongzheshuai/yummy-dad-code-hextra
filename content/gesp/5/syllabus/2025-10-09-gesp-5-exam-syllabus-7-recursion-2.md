@@ -18,14 +18,19 @@ math: true
 mermaid: true
 ---
 GESP C++五级官方考试大纲中，共有`9`条考点，本文针对第`7`条考点进行分析介绍。
-> （7）掌握递归算法的基本原理，能够应用递归解决问题，能够分析递归算法的时间复杂度和空间复杂度，了解递归的优化策略。
-{: .prompt-info}
 
+> [!Important]
+>
+> （7）掌握递归算法的基本原理，能够应用递归解决问题，能够分析递归算法的时间复杂度和空间复杂度，了解递归的优化策略。
+
+> [!Warning]
+>
 > 本人也是边学、边实验、边总结，且对考纲深度和广度的把握属于个人理解。因此本文更多的不是一个教程，而是个人知识梳理，如有遗漏、疏忽，欢迎指正、交流。
-{: .prompt-warning}
 
 ***五级其他考点回顾：***
 
+> [!Tip]
+>
 > * [【GESP】C++五级考试大纲知识点梳理, (1) 初等数论](https://www.coderli.com/gesp-5-exam-syllabus-elementary-number-theory/)
 > * [【GESP】C++五级考试大纲知识点梳理, (2) 模拟高精度计算](https://www.coderli.com/gesp-5-exam-syllabus-simulate-high-precision-arithmetic/)
 > * [【GESP】C++五级考试大纲知识点梳理, (3-1) 链表-单链表](https://www.coderli.com/gesp-5-exam-syllabus-linked-list-1-singly/)
@@ -36,7 +41,6 @@ GESP C++五级官方考试大纲中，共有`9`条考点，本文针对第`7`条
 > * [【GESP】C++五级考试大纲知识点梳理, (5) 算法复杂度估算（多项式、对数）](https://www.coderli.com/gesp-5-exam-syllabus-5-estimation-of-algorithm-polynomial-logarithmic/)
 > * [【GESP】C++五级考试大纲知识点梳理, (6) 二分查找和二分答案](https://www.coderli.com/gesp-5-exam-syllabus-6-binary-search/)
 > * [【GESP】C++五级考试大纲知识点梳理, (7) 递归算法 - 1 基本原理](https://www.coderli.com/gesp-5-exam-syllabus-7-recursion-1/)
-{: .prompt-tip}
 
 <!--more-->
 
@@ -200,10 +204,11 @@ $$
 | 2️⃣ 平衡    | 若 $f(n) = \Theta(n^{\log_b a})$                     | $T(n) = \Theta(n^{\log_b a} \log n)$ |
 | 3️⃣ 合并主导  | 若 $f(n) = \Omega(n^{\log_b a + \epsilon})$ 且满足正则性条件* | $T(n) = \Theta(f(n))$                |
 
+> [!Tip]
+>
 >*注：正则性条件说明*
 >
 >正则性条件：存在常数 $c<1$ 使得对所有足够大的 $n$ 有 $a f(n/b) \le c f(n)$，确保“上层合并不吃掉下层优势”。
-{: .prompt-tip}
 
 举几个典型例子：
 
@@ -232,8 +237,9 @@ $$
 
 空间复杂度描述的是：
 
+> [!Note]
+>
 > 算法在运行过程中**额外占用的内存空间量**，与输入规模 $n$ 的关系。
-{: .prompt-info}
 
 “额外”指的是不算输入数据本身，只算程序执行中自己用到的额外内存，例如：
 
@@ -272,8 +278,9 @@ void f(int n) {
 
 因此：
 
+> [!Note]
+>
 > 递归的空间复杂度 = 递归调用的最大深度 × 每次调用占用的空间。
-> {: .prompt-info}
 
 通常，每次调用的局部变量数量是常数级的，所以空间复杂度主要看**递归深度**。
 
@@ -369,4 +376,3 @@ void tail(int n, int acc) {
 5️⃣ **忽略常数项，取最大阶**，写成 O(·) 表达。  
 
 ---
-{% include custom/custom-post-content-footer.md %}

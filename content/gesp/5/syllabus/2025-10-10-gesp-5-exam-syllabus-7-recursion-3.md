@@ -18,14 +18,19 @@ math: true
 mermaid: true
 ---
 GESP C++五级官方考试大纲中，共有`9`条考点，本文针对第`7`条考点进行分析介绍。
-> （7）掌握递归算法的基本原理，能够应用递归解决问题，能够分析递归算法的时间复杂度和空间复杂度，了解递归的优化策略。
-{: .prompt-info}
 
+> [!Important]
+>
+> （7）掌握递归算法的基本原理，能够应用递归解决问题，能够分析递归算法的时间复杂度和空间复杂度，了解递归的优化策略。
+
+> [!Warning]
+>
 > 本人也是边学、边实验、边总结，且对考纲深度和广度的把握属于个人理解。因此本文更多的不是一个教程，而是个人知识梳理，如有遗漏、疏忽，欢迎指正、交流。
-{: .prompt-warning}
 
 ***五级其他考点回顾：***
 
+> [!Tip]
+>
 > * [【GESP】C++五级考试大纲知识点梳理, (1) 初等数论](https://www.coderli.com/gesp-5-exam-syllabus-elementary-number-theory/)
 > * [【GESP】C++五级考试大纲知识点梳理, (2) 模拟高精度计算](https://www.coderli.com/gesp-5-exam-syllabus-simulate-high-precision-arithmetic/)
 > * [【GESP】C++五级考试大纲知识点梳理, (3-1) 链表-单链表](https://www.coderli.com/gesp-5-exam-syllabus-linked-list-1-singly/)
@@ -37,7 +42,6 @@ GESP C++五级官方考试大纲中，共有`9`条考点，本文针对第`7`条
 > * [【GESP】C++五级考试大纲知识点梳理, (6) 二分查找和二分答案](https://www.coderli.com/gesp-5-exam-syllabus-6-binary-search/)
 > * [【GESP】C++五级考试大纲知识点梳理, (7) 递归算法 - 1 基本原理](https://www.coderli.com/gesp-5-exam-syllabus-7-recursion-1/)
 > * [【GESP】C++五级考试大纲知识点梳理, (7) 递归算法 - 2 复杂度分析](https://www.coderli.com/gesp-5-exam-syllabus-7-recursion-2/)
-{: .prompt-tip}
 
 <!--more-->
 
@@ -57,8 +61,9 @@ GESP C++五级官方考试大纲中，共有`9`条考点，本文针对第`7`条
 
 递归是编程中非常优雅的一种思想：
 
+> [!Note]
+>
 > “让函数自己解决自己的一部分问题。”
-{: .prompt-info}
 
 但它也有两个明显的缺点：
 
@@ -82,9 +87,10 @@ GESP C++五级官方考试大纲中，共有`9`条考点，本文针对第`7`条
 
 ### （1）尾递归优化（Tail Recursion Optimization）
 
+> [!Note]
+>
 >**原理：**
 >当一个递归函数在“最后一步”调用自身，并且不再需要返回上一层结果时，编译器可以将它优化成“循环”，从而避免新建函数栈帧。
-{: .prompt-info}
 
 ***典型例子：计算阶乘***
 
@@ -123,9 +129,10 @@ int factorialTail(int n, int result = 1) {
 
 ### （2）记忆化递归（Memoization）
 
+> [!Note]
+>
 >**原理：**
 >如果递归中存在 **重复子问题**，就把中间结果缓存下来。下次遇到相同的输入，直接取结果，而不是重新计算。
-{: .prompt-info}
 
 ***典型例子：斐波那契数列***
 
@@ -201,10 +208,11 @@ int fib(int n) {
 
 ### （3）递归改写为迭代
 
+> [!Note]
+>
 >**原理：**
 >递归其实是“系统帮你管理栈”的过程。
 >如果自己维护一个**显式栈**或使用循环，也能实现同样的逻辑。
-{: .prompt-info}
 
 ***典型例子：二叉树的前序遍历***（可先了解有该思想，由于考纲尚未学到树，对于具体问题和代码尽量理解，掌握多少均可）
 
@@ -253,9 +261,10 @@ void preorderIter(TreeNode* root) {
 
 ### （4）分治 + 剪枝优化（Pruning）
 
+> [!Note]
+>
 >**原理：**
 >在递归搜索中，提前排除“不可能的情况”，减少不必要的递归分支。
-{: .prompt-info}
 
 ***典型例子：八皇后问题***（可先了解有该思想，对于具体问题和代码尽量理解，掌握多少均可）
 
@@ -425,4 +434,3 @@ void quicksort_optimized(vector<int>& a, int l, int r, int depth = 0) {
 * **不占太多空间（更稳）**
 
 ---
-{% include custom/custom-post-content-footer.md %}

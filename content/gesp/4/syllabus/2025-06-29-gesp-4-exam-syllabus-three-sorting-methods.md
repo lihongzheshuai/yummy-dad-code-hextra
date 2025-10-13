@@ -17,11 +17,15 @@ math: true
 mermaid: true
 ---
 GESP C++四级官方考试大纲中，共有11条考点，本文针对第8条考点进行分析介绍。
+
+> [!Tip]
+>
 > （8）掌握排序算法中的冒泡排序、插入排序、选择排序的算法思想、排序步骤及代码实现。
-{: .prompt-info}
 
 ***四级其他考点回顾：***
 
+> [!Tip]
+>
 > * [【GESP】C++四级考试大纲知识点梳理, (1) 指针](https://www.coderli.com/gesp-4-exam-syllabus-pointer/)
 > * [【GESP】C++四级考试大纲知识点梳理, (2) 结构体和二维数组](https://www.coderli.com/gesp-4-exam-syllabus-struct-two-dimensional-array/)
 > * [【GESP】C++四级考试大纲知识点梳理, (3) 模块化和函数](https://www.coderli.com/gesp-4-exam-syllabus-module-function/)
@@ -29,7 +33,6 @@ GESP C++四级官方考试大纲中，共有11条考点，本文针对第8条考
 > * [【GESP】C++四级考试大纲知识点梳理, (5) 值传递](https://www.coderli.com/gesp-4-exam-syllabus-pass-by-value-reference-pointer/)
 > * [【GESP】C++四级考试大纲知识点梳理, (6) 递推算法](https://www.coderli.com/gesp-4-exam-syllabus-iteration-algo/)
 > * [【GESP】C++四级考试大纲知识点梳理, (7) 排序算法基本概念](https://www.coderli.com/gesp-4-exam-syllabus-sorting-algo-conception/)
-{: .prompt-tip}
 
 <!--more-->
 
@@ -63,8 +66,9 @@ GESP C++四级官方考试大纲中，共有11条考点，本文针对第8条考
 
 ![冒泡排序流程示意](https://www.hello-algo.com/chapter_sorting/bubble_sort.assets/bubble_sort_overview.png)
 
+> [!Tip]
+>
 >图片来自开源书籍：[***《Hello，算法》***](https://www.hello-algo.com/chapter_hello_algo/)
-{: .prompt-tip}
 
 ### 1.3 时间复杂度
 
@@ -219,8 +223,9 @@ int main() {
 
 ![插入排序流程示意](https://www.hello-algo.com/chapter_sorting/insertion_sort.assets/insertion_operation.png)
 
+> [!Tip]
+>
 >图片来自开源书籍：[***《Hello，算法》***](https://www.hello-algo.com/chapter_hello_algo/)
-{: .prompt-tip}
 
 ### 2.3 时间复杂度
 
@@ -366,8 +371,9 @@ int main() {
 
 ⚠️ 注意：
 
+> [!Warning]
+>
 >与冒泡不同，它是先“找”再交换，而不是每次都交换。
-{: .prompt-warning}
 
 ### 3.2 算法流程
 
@@ -401,11 +407,12 @@ int main() {
 
 ⚠️ 注意：
 
+> [!Warning]
+>
 >选择排序是不稳定的，如图所示：
 >![选择排序不稳定性示意](https://www.hello-algo.com/chapter_sorting/selection_sort.assets/selection_sort_instability.png)
 >
 >图片来自开源书籍：[***《Hello，算法》***](https://www.hello-algo.com/chapter_hello_algo/)
-{: .prompt-warning}
 
 ### 3.3 时间复杂度
 

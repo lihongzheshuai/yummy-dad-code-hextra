@@ -17,8 +17,9 @@ weight: 11
 math: true
 ---
 
+> [!Note]
+>
 >前文（[***【GESP/CSP】编程武器库-2, 十进制转换十六进制***](https://www.coderli.com/gesp-arsenal-2-dec-hex-conversion/)），我们介绍了从十进制到十六进制的处理手段，很显然这只做到了一半。在之前做过的[***【GESP】C++四级真题 luogu-B3869 [GESP202309 四级] 进制转换***](https://www.coderli.com/gesp-4-luogu-b3869/)题目中，需要将不同进制的数字转换成十进制表示出来，其中十六进制由于涉及字母，相对特殊，其他进制类比即可，今天就专门总结下这个知识点，希望下次遇到可以"信手拈来"。
-{: .prompt-info}
 
 当前武器库清单
 
@@ -30,8 +31,9 @@ math: true
 | [字符判断](https://www.coderli.com/tags/%E6%AD%A6%E5%99%A8%E5%BA%93-%E5%AD%97%E7%AC%A6/) | 判断是否为小写字母(a-z) |  [【GESP/CSP】编程武器库-1, 字符类型判断](https://www.coderli.com/gesp-arsenal-1-char-check-number-alpha) |
 | [进制转换](https://www.coderli.com/tags/%E6%AD%A6%E5%99%A8%E5%BA%93-%E8%BF%9B%E5%88%B6%E8%BD%AC%E6%8D%A2/) | 十进制和十六进制转换 |  [【GESP/CSP】编程武器库-2, 十进制转换十六进制](https://www.coderli.com/gesp-arsenal-2-dec-hex-conversion) |
 
+> [!Warning]
+>
 > 本人也是边学、边实验、边总结。因此本文更多的不是一个教程，而是个人知识梳理，如有遗漏、疏忽，欢迎指正、交流。
-{: .prompt-warning}
 
 <!--more-->
 
@@ -225,5 +227,3 @@ int main() {
 上述代码为十六进制字符串转换成十进制整数核心逻辑。不支持有进制前缀`0x`的情况，如果有前缀，你只需要先截取掉，在按上述代码处理即可。这里就不再赘述，留作读者自己实现。
 
 ---
-
-{% include custom/custom-post-content-footer.md %}

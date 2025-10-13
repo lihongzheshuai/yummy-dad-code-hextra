@@ -17,13 +17,16 @@ math: true
 mermaid: true
 ---
 GESP C++四级官方考试大纲中，共有11条考点，本文针对第2条考点进行分析介绍。
+
+> [!Tip]
+>
 > （2）掌握 C++结构体、二维及多维数组的基本概念及使用
-{: .prompt-info}
 
 ***四级其他考点回顾：***
 
+> [!Tip]
+>
 > [【GESP】C++四级考试大纲知识点梳理, (1) 指针](https://www.coderli.com/gesp-4-exam-syllabus-pointer/)
-{: .prompt-tip}
 
 <!--more-->
 

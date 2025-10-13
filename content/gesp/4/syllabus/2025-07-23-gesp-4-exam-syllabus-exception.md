@@ -18,13 +18,17 @@ math: true
 mermaid: true
 ---
 终于到最后一条了，GESP C++四级官方考试大纲中，共有11条考点，本文针对第11条考点进行分析介绍。
+
+> [!Tip]
+>
 > （11）了解异常处理机制，掌握异常处理的常用方法。
-{: .prompt-info}
 
 其实，由于本人也是边学、边实验、边总结，且对考纲深度和广度的把握属于个人理解。因此本文更多的不是一个教程，而是个人知识梳理，如有遗漏、疏忽，欢迎指正、交流。
 
 ***四级其他考点回顾：***
 
+> [!Tip]
+>
 > * [【GESP】C++四级考试大纲知识点梳理, (1) 指针](https://www.coderli.com/gesp-4-exam-syllabus-pointer/)
 > * [【GESP】C++四级考试大纲知识点梳理, (2) 结构体和二维数组](https://www.coderli.com/gesp-4-exam-syllabus-struct-two-dimensional-array/)
 > * [【GESP】C++四级考试大纲知识点梳理, (3) 模块化和函数](https://www.coderli.com/gesp-4-exam-syllabus-module-function/)
@@ -35,7 +39,6 @@ mermaid: true
 > * [【GESP】C++四级考试大纲知识点梳理, (8) 冒泡、插入、选择排序](https://www.coderli.com/gesp-4-exam-syllabus-three-sorting-methods/)
 > * [【GESP】C++四级考试大纲知识点梳理, (9) 简单算法复杂度的估算](https://www.coderli.com/gesp-4-exam-syllabus-estimation-of-algorithm-time-complexity/)
 > * [【GESP】C++四级考试大纲知识点梳理, (10) 文件读写和重定向](https://www.coderli.com/gesp-4-exam-syllabus-file-read-write/)
-{: .prompt-tip}
 
 <!--more-->
 

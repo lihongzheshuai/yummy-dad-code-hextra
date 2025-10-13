@@ -17,15 +17,18 @@ math: true
 mermaid: true
 ---
 GESP C++四级官方考试大纲中，共有11条考点，本文针对第4条考点进行分析介绍。
+
+> [!Tip]
+>
 > （4）掌握变量作用域的概念，理解全局变量与局部变量的区别。
-{: .prompt-info}
 
 ***四级其他考点回顾：***
 
+> [!Tip]
+>
 > * [【GESP】C++四级考试大纲知识点梳理, (1) 指针](https://www.coderli.com/gesp-4-exam-syllabus-pointer/)
 > * [【GESP】C++四级考试大纲知识点梳理, (2) 结构体和二维数组](https://www.coderli.com/gesp-4-exam-syllabus-struct-two-dimensional-array/)
 > * [【GESP】C++四级考试大纲知识点梳理, (3) 模块化和函数](https://www.coderli.com/gesp-4-exam-syllabus-module-function/)
-{: .prompt-tip}
 
 <!--more-->
 

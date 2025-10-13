@@ -17,8 +17,9 @@ weight: 10
 math: true
 ---
 
+> [!Note]
+>
 >在之前做过的[***【GESP】C++四级真题 luogu-B3851 [GESP202306 四级] 图像压缩***](https://www.coderli.com/gesp-4-luogu-b3851/)题目中，需要将一个数字转换为十六进制表示并输出出来，如果你的"武器库"缺少这部分技能，你可能会一下不知所措，今天就专门总结下这个知识点，希望下次遇到可以"信手拈来"。
-{: .prompt-info}
 
 当前武器库清单
 
@@ -30,8 +31,9 @@ math: true
 | [字符判断](https://www.coderli.com/tags/%E6%AD%A6%E5%99%A8%E5%BA%93-%E5%AD%97%E7%AC%A6/) | 判断是否为小写字母(a-z) |  [【GESP/CSP】编程武器库-1, 字符类型判断](https://www.coderli.com/gesp-arsenal-1-char-check-number-alpha) |
 | 进制转换 | 十进制和十六进制转换 |  [【GESP/CSP】编程武器库-2, 十进制和十六进制转换](https://www.coderli.com/gesp-arsenal-2-dec-hex-conversion) |
 
+> [!Warning]
+>
 > 本人也是边学、边实验、边总结。因此本文更多的不是一个教程，而是个人知识梳理，如有遗漏、疏忽，欢迎指正、交流。
-{: .prompt-warning}
 
 <!--more-->
 
@@ -88,9 +90,10 @@ cout << showbase << hex << n << endl; // 0xff
 0xff
 ```
 
+> [!Warning]
+>
 >需要注意的是：
 在 `iostream` 里，`setw()` 的宽度是对 **整个输出字段** 起作用，而不是只对数值部分。
-{: .prompt-warning}
 
 所以如果直接写：
 
@@ -372,5 +375,3 @@ int main() {
 | **需要存储结果**  | `ostringstream` 或手写函数           | `"FF"`（字符串形式）    |
 
 ---
-
-{% include custom/custom-post-content-footer.md %}

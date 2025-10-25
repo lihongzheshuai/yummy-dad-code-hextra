@@ -4,6 +4,12 @@
     border-radius: 10px;
 }
 
+.custom-notice-info {
+    background: rgba(90, 130, 238, 0.25);
+    padding: 12px;
+    border-radius: 10px;
+}
+
 /* Background */ .bg { background-color:#fff; }
 /* PreWrapper */ .chroma { background-color:#fff; }
 /* Other */ .chroma .x {  }

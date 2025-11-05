@@ -62,28 +62,28 @@ menu:
       pageRef: /gesp/arsenal
       weight: 6
       parent: GESP
-    - name: 投资
-      pageRef: /invest
+    - name: CSP
+      pageRef: /csp
       weight: 2
-    - name: 行业研究
-      pageRef: /invest/industry
-      weight: 3
-      parent: 投资
+    - name: CSP-XL
+      pageRef: /csp/xl
+      weight: 2
+      parent: CSP
     - name: Blog ↗
       url: "https://www.coderli.com/"
-      weight: 3
+      weight: 4
     - name: About
       pageRef: /about
-      weight: 4
+      weight: 5
     - name: Tags
       pageRef: /tags
-      weight: 5
-    - name: Search
       weight: 6
+    - name: Search
+      weight: 7
       params:
         type: search
     - name: GitHub
-      weight: 7
+      weight: 8
       url: "https://github.com/lihongzheshuai/yummy-code"
       params:
         icon: github

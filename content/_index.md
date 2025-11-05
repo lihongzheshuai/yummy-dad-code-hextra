@@ -17,10 +17,10 @@ toc: false
   {{< card link="gesp/arsenal" title="编程必备武器库" icon="book-open" >}}
 {{< /cards >}}
 
-## 投资
+## CSP
 
 {{< cards >}}
-  {{< card link="invest/industry" title="行业研究" icon="book-open" >}}
+  {{< card link="csp/xl" title="CSP-XL" icon="book-open" >}}
 {{< /cards >}}
 
 ## 其他

@@ -1,8 +1,8 @@
 ---
 title: 3级
 type: docs
-prev: gesp/
-next: gesp/2/syllabus
+prev: gesp/2/
+next: gesp/4/
 sidebar:
   open: true
 weight: 3

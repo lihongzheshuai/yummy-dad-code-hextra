@@ -1,8 +1,8 @@
 ---
 title: 4级
 type: docs
-prev: gesp/
-next: gesp/4/syllabus
+prev: gesp/3
+next: gesp/5/
 sidebar:
   open: true
 weight: 4

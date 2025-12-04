@@ -1,8 +1,8 @@
 ---
 title: 5级
 type: docs
-prev: gesp/
-next: gesp/2/syllabus
+prev: gesp/4/
+next: gesp/6/
 sidebar:
   open: true
 weight: 5

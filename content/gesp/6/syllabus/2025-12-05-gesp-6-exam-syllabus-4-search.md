@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 考试大纲知识点梳理, (4) 搜索算法
+title: (4) 搜索算法
 date: 2025-12-05T08:00:00+0800
 author: OneCoder
 comments: true

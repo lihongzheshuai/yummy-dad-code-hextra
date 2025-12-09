@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 考试大纲知识点梳理, (7) 栈与队列
+title:  (7) 栈与队列
 date: 2025-12-09T08:00:00+0800
 author: OneCoder
 comments: true

@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 考试大纲知识点梳理, (5) 动态规划与背包问题
+title: (5) 动态规划与背包问题
 date: 2025-12-07T08:00:00+0800
 author: OneCoder
 comments: true

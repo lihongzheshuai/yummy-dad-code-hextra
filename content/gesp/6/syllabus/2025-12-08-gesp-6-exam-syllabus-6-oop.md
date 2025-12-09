@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 考试大纲知识点梳理, (6) 面向对象编程(OOP)基础
+title: (6) 面向对象编程(OOP)基础
 date: 2025-12-08T08:00:00+0800
 author: OneCoder
 comments: true

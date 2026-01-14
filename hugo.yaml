@@ -62,6 +62,10 @@ menu:
       pageRef: /gesp/arsenal
       weight: 6
       parent: GESP
+    - name: 考纲考点揭秘
+      pageRef: /gesp/secrets
+      weight: 7
+      parent: GESP
     - name: CSP
       pageRef: /csp
       weight: 2

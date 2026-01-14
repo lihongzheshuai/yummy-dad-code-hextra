@@ -247,6 +247,10 @@ class GESPFileOrganizer:
         
         # 注意：CSP文件的处理已移到analyze_files方法中，此处不再处理
         
+        # 检查是否为secrets系列文章
+        if 'gesp-secrets' in filename:
+            return 'secrets'
+            
         # 检查是否为必备技能文章（优先处理，不需要级别分类）
         for category in categories:
             if '必备技能' in str(category):
@@ -291,7 +295,9 @@ class GESPFileOrganizer:
         # 检查文件名格式：yyyy-MM-dd-gesp-*.md 或包含csp-的文件
         gesp_pattern = r'^\d{4}-\d{2}-\d{2}-gesp-.*\.md$'
         csp_pattern = r'^\d{4}-\d{2}-\d{2}-.*csp-.*\.md$'
-        return bool(re.match(gesp_pattern, filename) or re.match(csp_pattern, filename))
+        # 增加对gesp-secrets系列的支持
+        secrets_pattern = r'.*gesp-secrets.*\.md$'
+        return bool(re.match(gesp_pattern, filename) or re.match(csp_pattern, filename) or re.match(secrets_pattern, filename))
     
     def check_file_exists_in_target(self, filename: str) -> Optional[str]:
         """

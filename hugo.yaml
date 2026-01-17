@@ -76,6 +76,9 @@ menu:
     - name: Blog ↗
       url: "https://www.coderli.com/"
       weight: 4
+    - name: 投资 ↗
+      url: "https://invest.coderli.com/"
+      weight: 4
     - name: About
       pageRef: /about
       weight: 5

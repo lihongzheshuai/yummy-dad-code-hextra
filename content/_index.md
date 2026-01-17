@@ -27,7 +27,9 @@ toc: false
 
 ## 其他
 
+
 {{< cards >}}
+  {{< card link="https://invest.coderli.com/" title="投资思考" icon="book-open" >}}
   {{< card link="about" title="About" icon="user" >}}
 {{< /cards >}}
 

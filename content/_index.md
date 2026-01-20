@@ -15,6 +15,7 @@ toc: false
   {{< card link="gesp/4" title="四级" icon="book-open" >}}
   {{< card link="gesp/5" title="五级" icon="book-open" >}}
   {{< card link="gesp/6" title="六级" icon="book-open" >}}
+  {{< card link="gesp/7" title="七级" icon="book-open" >}}
   {{< card link="gesp/arsenal" title="编程必备武器库" icon="book-open" >}}
   {{< card link="gesp/secrets" title="考纲考点揭秘" icon="book-open" >}}
 {{< /cards >}}

@@ -1,7 +1,7 @@
 ---
 layout: post
-title: 考试大纲知识点梳理, (1) 数学库常用函数
-date: 2025-12-28T21:15:00+0800
+title:  (1) 数学库常用函数
+date: 2026-01-19T08:15:00+0800
 author: OneCoder
 comments: true
 tags:
@@ -14,7 +14,7 @@ categories:
 - 七级
 slug: gesp-7-exam-syllabus-math-library
 type: docs
-weight: 1
+weight: 2
 math: true
 mermaid: true
 ---
@@ -58,7 +58,7 @@ GESP C++七级考试大纲中共有`4`条考点，第`1`条考点要求我们熟
 
 ### 1.2 角度与弧度的转换
 
-考试中给出的题目往往是角度（例如 30°, 90°），直接传给 python `sin(30)` 是错的！必须先转为弧度。
+考试中给出的题目往往是角度（例如 30°, 90°），直接传给 C++ 的 `sin(30)` 是错的！必须先转为弧度。
 
 * **公式**：
   $$ \text{弧度} = \text{角度} \times \frac{\pi}{180} $$
@@ -90,6 +90,7 @@ int main() {
     return 0;
 }
 ```
+
 
 ---
 

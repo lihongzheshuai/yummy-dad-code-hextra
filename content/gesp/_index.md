@@ -20,7 +20,11 @@ CCF(中国计算机学会), [GESP(CCF编程能力等级认证)](https://gesp.ccf
   {{< card link="3" title="三级" icon="book-open" >}}
   {{< card link="4" title="四级" icon="book-open" >}}
   {{< card link="5" title="五级" icon="book-open" >}}
+  {{< card link="6" title="六级" icon="book-open" >}}
+  {{< card link="7" title="七级" icon="book-open" >}}
+  {{< card link="8" title="八级" icon="book-open" >}}
   {{< card link="arsenal" title="编程必备武器库" icon="book-open" >}}
+  {{< card link="secrets" title="考纲考点揭秘" icon="book-open" >}}
 {{< /cards >}}
 
 ## 【亲子编程GESP】微信公众号

@@ -66,39 +66,43 @@ menu:
       pageRef: /gesp/7
       weight: 7
       parent: GESP
+    - name: 8级
+      pageRef: /gesp/8
+      weight: 8
+      parent: GESP
     - name: 编程必备武器库
       pageRef: /gesp/arsenal
-      weight: 8
+      weight: 9
       parent: GESP
     - name: 考纲考点揭秘
       pageRef: /gesp/secrets
-      weight: 9
+      weight: 10
       parent: GESP
     - name: CSP
       pageRef: /csp
-      weight: 10
+      weight: 11
     - name: CSP-XL
       pageRef: /csp/xl
-      weight: 11
+      weight: 12
       parent: CSP
     - name: Blog ↗
       url: "https://www.coderli.com/"
-      weight: 12
+      weight: 13
     - name: 投资 ↗
       url: "https://invest.coderli.com/"
-      weight: 13
+      weight: 14
     - name: About
       pageRef: /about
-      weight: 14
+      weight: 15
     - name: Tags  
       pageRef: /tags
-      weight: 15
-    - name: Search
       weight: 16
+    - name: Search
+      weight: 17
       params:
         type: search
     - name: GitHub
-      weight: 17
+      weight: 18
       url: "https://github.com/lihongzheshuai/yummy-code"
       params:
         icon: github

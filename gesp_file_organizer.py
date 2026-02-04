@@ -471,11 +471,20 @@ class GESPFileOrganizer:
                 if is_csp_file:
                     target_subdir = 'others'  # 默认CSP目录
                     
-                    # 检查是否为CSP XL真题
-                    category_str = ''.join(str(cat) for cat in frontmatter.get('categories', []))
+                    categories = frontmatter.get('categories', [])
+                    category_str = ''.join(str(cat) for cat in categories).lower()
+                    tags = frontmatter.get('tags', [])
+                    tags_str = ''.join(str(tag) for tag in tags).lower()
                     title = frontmatter.get('title', '')
                     
-                    if 'xl' in category_str.lower() and '真题' in title:
+                    # 检查是否为CSP-J
+                    if 'csp' in category_str and 'j' in category_str:
+                        if '真题' in title or '真题' in tags_str:
+                            target_subdir = 'j/realexam'
+                        else:
+                            target_subdir = 'j'
+                    # 检查是否为CSP XL真题
+                    elif 'xl' in category_str and '真题' in title:
                         target_subdir = 'xl/realexam'
                     
                     # CSP文件使用专门的目标目录
@@ -787,15 +796,15 @@ def main():
     
     # 选择操作模式
     print("\n请选择操作模式:")
-    print("1. 直接执行文件拷贝（默认）")
-    print("2. 预览后再执行拷贝")
+    print("1. 预览后再执行拷贝（默认）")
+    print("2. 直接执行文件拷贝")
     
     choice = input("请输入选择 (1/2, 默认1): ").strip() or "1"
     
-    if choice == "1":
+    if choice == "2":
         # 直接执行拷贝
         organizer.organize_files()
-    elif choice == "2":
+    elif choice == "1":
         # 预览后询问是否执行
         copy_plan, existed_files_map = organizer.analyze_files()
         

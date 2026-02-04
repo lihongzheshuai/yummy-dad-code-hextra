@@ -85,24 +85,28 @@ menu:
       pageRef: /csp/xl
       weight: 12
       parent: CSP
+    - name: CSP-J
+      pageRef: /csp/j
+      weight: 13
+      parent: CSP
     - name: Blog ↗
       url: "https://www.coderli.com/"
-      weight: 13
+      weight: 15
     - name: 投资 ↗
       url: "https://invest.coderli.com/"
-      weight: 14
+      weight: 16
     - name: About
       pageRef: /about
-      weight: 15
+      weight: 17
     - name: Tags  
       pageRef: /tags
-      weight: 16
+      weight: 18
     - name: Search
-      weight: 17
+      weight: 19
       params:
         type: search
     - name: GitHub
-      weight: 18
+      weight: 20
       url: "https://github.com/lihongzheshuai/yummy-code"
       params:
         icon: github

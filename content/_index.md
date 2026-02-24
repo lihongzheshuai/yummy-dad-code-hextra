@@ -28,6 +28,12 @@ toc: false
 {{< card link="csp/j" title="CSP-J" icon="book-open" >}}
 {{< /cards >}}
 
+## NOI相关
+
+{{< cards >}}
+{{< card link="noirelated/noip/" title="NOIP" icon="book-open" >}}
+{{< /cards >}}
+
 ## 其他
 
 {{< cards >}}

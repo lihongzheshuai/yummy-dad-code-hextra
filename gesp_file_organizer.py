@@ -34,6 +34,9 @@ class GESPFileOrganizer:
         # CSP文件应该迁移到与gesp同级的csp目录
         self.csp_target_dir = self.target_dir.parent / "csp" if self.target_dir.name == "gesp" else self.target_dir / "csp"
         
+        # NOIP文件应该迁移到与gesp同级的noirelated目录
+        self.noirelated_target_dir = self.target_dir.parent / "noirelated" if self.target_dir.name == "gesp" else self.target_dir / "noirelated"
+        
         # 缓存文件路径
         self.cache_file = Path(__file__).parent / ".gesp_file_cache.json"
         
@@ -110,6 +113,13 @@ class GESPFileOrganizer:
             for md_file in self.csp_target_dir.rglob("*.md"):
                 filename = md_file.name
                 relative_path = str(md_file.relative_to(self.csp_target_dir))
+                existed_files[filename] = relative_path
+        
+        # 递归扫描NOIP目标目录
+        if self.noirelated_target_dir.exists():
+            for md_file in self.noirelated_target_dir.rglob("*.md"):
+                filename = md_file.name
+                relative_path = str(md_file.relative_to(self.noirelated_target_dir))
                 existed_files[filename] = relative_path
         
         # 更新缓存
@@ -245,7 +255,7 @@ class GESPFileOrganizer:
         title = frontmatter.get('title', '')
         categories = frontmatter.get('categories', [])
         
-        # 注意：CSP文件的处理已移到analyze_files方法中，此处不再处理
+        # 注意：CSP和NOIP文件的处理已移到analyze_files方法中，此处不再处理
         
         # 检查是否为secrets系列文章
         if 'gesp-secrets' in filename:
@@ -295,9 +305,10 @@ class GESPFileOrganizer:
         # 检查文件名格式：yyyy-MM-dd-gesp-*.md 或包含csp-的文件
         gesp_pattern = r'^\d{4}-\d{2}-\d{2}-gesp-.*\.md$'
         csp_pattern = r'^\d{4}-\d{2}-\d{2}-.*csp-.*\.md$'
+        noip_pattern = r'^\d{4}-\d{2}-\d{2}-.*noip-.*\.md$'
         # 增加对gesp-secrets系列的支持
         secrets_pattern = r'.*gesp-secrets.*\.md$'
-        return bool(re.match(gesp_pattern, filename) or re.match(csp_pattern, filename) or re.match(secrets_pattern, filename))
+        return bool(re.match(gesp_pattern, filename) or re.match(csp_pattern, filename) or re.match(secrets_pattern, filename) or re.match(noip_pattern, filename))
     
     def check_file_exists_in_target(self, filename: str) -> Optional[str]:
         """
@@ -335,6 +346,25 @@ class GESPFileOrganizer:
             # 直接从文件系统查找
             for existing_file in self.csp_target_dir.rglob(filename):
                 return str(existing_file.relative_to(self.csp_target_dir))
+            return None
+
+    def check_file_exists_in_noirelated_target(self, filename: str) -> Optional[str]:
+        """
+        检查文件是否在NOI Related目标路径下的任何位置存在
+        
+        Args:
+            filename: 文件名
+            
+        Returns:
+            如果文件存在，返回相对于NOI Related目标根目录的路径；否则返回None
+        """
+        if self.use_cache:
+            # 使用缓存查找
+            return self.cache.get("existed_files", {}).get(filename)
+        else:
+            # 直接从文件系统查找
+            for existing_file in self.noirelated_target_dir.rglob(filename):
+                return str(existing_file.relative_to(self.noirelated_target_dir))
             return None
     
     def run_formatter(self, copied_files: Optional[List[str]] = None) -> bool:
@@ -450,15 +480,6 @@ class GESPFileOrganizer:
         for file_path in md_files:
             filename = file_path.name
             
-            # 检查是否为GESP文件或CSP相关文件
-            if not self.is_gesp_file(filename):
-                continue
-            
-            # 对于CSP文件，使用特殊处理逻辑
-            is_csp_file = False
-            if '-csp-' in filename.lower():
-                is_csp_file = True
-            
             try:
                 with open(file_path, 'r', encoding='utf-8') as f:
                     content = f.read()
@@ -467,36 +488,75 @@ class GESPFileOrganizer:
                 if not frontmatter:
                     continue
                 
+                categories = frontmatter.get('categories', [])
+                categories_str = ' '.join(str(cat).lower() for cat in categories)
+                
+                # 综合判断是否为目标文件
+                is_filename_match = self.is_gesp_file(filename)
+                is_category_match = any(keyword in categories_str for keyword in ['gesp', 'csp', 'noip', 'noi'])
+                
+                if not (is_filename_match or is_category_match):
+                    continue
+
+                # 标记文件类型
+                is_csp_file = '-csp-' in filename.lower() or ('csp' in categories_str)
+                is_noip_file = '-noip-' in filename.lower() or ('noip' in categories_str) or ('noi' in categories_str)
+                
+                target_subdir = None
+
                 # 对于CSP文件，使用特殊的目标目录逻辑
                 if is_csp_file:
                     target_subdir = 'others'  # 默认CSP目录
                     
-                    categories = frontmatter.get('categories', [])
-                    category_str = ''.join(str(cat) for cat in categories).lower()
                     tags = frontmatter.get('tags', [])
                     tags_str = ''.join(str(tag) for tag in tags).lower()
                     title = frontmatter.get('title', '')
                     
                     # 检查是否为CSP-J
-                    if 'csp' in category_str and 'j' in category_str:
+                    if 'csp' in categories_str and 'j' in categories_str:
                         if '真题' in title or '真题' in tags_str:
                             target_subdir = 'j/realexam'
                         else:
                             target_subdir = 'j'
                     # 检查是否为CSP XL真题
-                    elif 'xl' in category_str and '真题' in title:
+                    elif 'xl' in categories_str and '真题' in title:
                         target_subdir = 'xl/realexam'
                     
-                    # CSP文件使用专门的目标目录
-                    csp_target_path = self.csp_target_dir / target_subdir
+                elif is_noip_file:
+                    # NOIP Logic: Extract year from categories or filename
+                    year = None
+                    # Try categories: match standalone 4-digit year or 'noip 1998'
+                    for cat in categories:
+                        cat_str = str(cat).lower()
+                        # Match 'noip 1998'
+                        match = re.search(r'noip\s+((?:19|20)\d{2})', cat_str)
+                        if match:
+                            year = match.group(1)
+                            break
+                        # Match 4 digit year
+                        if re.match(r'^(?:19|20)\d{2}$', cat_str):
+                            year = cat_str
+                            break
+                    
+                    # If not in categories, look for second year in filename (usually YYYY-MM-DD is first)
+                    if not year:
+                        years = re.findall(r'(?:19|20)\d{2}', filename)
+                        if len(years) >= 2:
+                            year = years[1]
+                    
+                    if not year:
+                        year = "unknown"
+                    
+                    target_subdir = f"noip/{year}"
                 else:
                     target_subdir = self.determine_subdirectory(frontmatter, filename)
                 
                 if target_subdir:
                     # 检查文件是否在目标根路径下的任何位置已存在
                     if is_csp_file:
-                        # 对于CSP文件，检查在csp目录下是否存在
                         existing_path = self.check_file_exists_in_csp_target(filename)
+                    elif is_noip_file:
+                        existing_path = self.check_file_exists_in_noirelated_target(filename)
                     else:
                         existing_path = self.check_file_exists_in_target(filename)
                     
@@ -509,11 +569,15 @@ class GESPFileOrganizer:
                     else:
                         # 文件不存在，加入拷贝计划
                         if is_csp_file:
-                            # CSP文件使用专门的键
                             csp_key = f"_csp/{target_subdir}"
                             if csp_key not in copy_plan:
                                 copy_plan[csp_key] = []
                             copy_plan[csp_key].append((file_path, filename))
+                        elif is_noip_file:
+                            noip_key = f"_noip/{target_subdir}"
+                            if noip_key not in copy_plan:
+                                copy_plan[noip_key] = []
+                            copy_plan[noip_key].append((file_path, filename))
                         else:
                             if target_subdir not in copy_plan:
                                 copy_plan[target_subdir] = []
@@ -543,68 +607,47 @@ class GESPFileOrganizer:
         print()
         
         for target_subdir, files in copy_plan.items():
-            # 检查是否为CSP文件
             if target_subdir.startswith("_csp/"):
-                # 处理CSP文件
                 csp_subdir = target_subdir[len("_csp/"):]
                 print(f"📁 拷贝到 CSP目录 {csp_subdir}/ ({len(files)} 个文件)")
-                
-                for source_file_path, filename in files:
-                    try:
-                        target_path = self.csp_target_dir / csp_subdir / filename
-                        
-                        # 创建目标目录
-                        target_path.parent.mkdir(parents=True, exist_ok=True)
-                        
-                        # 拷贝文件
-                        shutil.copy2(source_file_path, target_path)
-                        
-                        print(f"  [OK] {filename}")
-                        copied_count += 1
-                        copied_files.append(str(target_path))  # 记录成功拷贝的文件路径
-                        
-                        # 如果是Markdown文件，提取并拷贝图片
-                        if filename.endswith('.md'):
-                            self._copy_referenced_images(source_file_path, target_path)
-                        
-                        # 更新缓存
-                        if self.use_cache:
-                            relative_path = str(target_path.relative_to(self.csp_target_dir))
-                            self.cache["existed_files"][filename] = relative_path
-                        
-                    except Exception as e:
-                        print(f"  [ERROR] {filename} - 拷贝失败: {e}")
-                        error_count += 1
+                target_base_dir = self.csp_target_dir
+                final_subdir = csp_subdir
+            elif target_subdir.startswith("_noip/"):
+                noip_subdir = target_subdir[len("_noip/"):]
+                print(f"📁 拷贝到 NOIP目录 {noip_subdir}/ ({len(files)} 个文件)")
+                target_base_dir = self.noirelated_target_dir
+                final_subdir = noip_subdir
             else:
-                # 处理普通GESP文件
                 print(f"📁 拷贝到 {target_subdir}/ ({len(files)} 个文件)")
-                
-                for source_file_path, filename in files:
-                    try:
-                        target_path = self.target_dir / target_subdir / filename
+                target_base_dir = self.target_dir
+                final_subdir = target_subdir
+            
+            for source_file_path, filename in files:
+                try:
+                    target_path = target_base_dir / final_subdir / filename
+                    
+                    # 创建目标目录
+                    target_path.parent.mkdir(parents=True, exist_ok=True)
+                    
+                    # 拷贝文件
+                    shutil.copy2(source_file_path, target_path)
+                    
+                    print(f"  [OK] {filename}")
+                    copied_count += 1
+                    copied_files.append(str(target_path))
+                    
+                    # 如果是Markdown文件，提取并拷贝图片
+                    if filename.endswith('.md'):
+                        self._copy_referenced_images(source_file_path, target_path)
+                    
+                    # 更新缓存
+                    if self.use_cache:
+                        relative_path = str(target_path.relative_to(target_base_dir))
+                        self.cache["existed_files"][filename] = relative_path
                         
-                        # 创建目标目录
-                        target_path.parent.mkdir(parents=True, exist_ok=True)
-                        
-                        # 拷贝文件
-                        shutil.copy2(source_file_path, target_path)
-                        
-                        print(f"  [OK] {filename}")
-                        copied_count += 1
-                        copied_files.append(str(target_path))  # 记录成功拷贝的文件路径
-                        
-                        # 如果是Markdown文件，提取并拷贝图片
-                        if filename.endswith('.md'):
-                            self._copy_referenced_images(source_file_path, target_path)
-                        
-                        # 更新缓存
-                        if self.use_cache:
-                            relative_path = str(target_path.relative_to(self.target_dir))
-                            self.cache["existed_files"][filename] = relative_path
-                        
-                    except Exception as e:
-                        print(f"  [ERROR] {filename} - 拷贝失败: {e}")
-                        error_count += 1
+                except Exception as e:
+                    print(f"  [ERROR] {filename} - 拷贝失败: {e}")
+                    error_count += 1
             
             print()
         
@@ -620,7 +663,6 @@ class GESPFileOrganizer:
         print(f"拷贝失败文件: {error_count}")
         print("=" * 60)
         
-        # 保存缓存
         if self.use_cache and copied_count > 0:
             self.save_cache()
         
@@ -650,10 +692,10 @@ class GESPFileOrganizer:
         total_files = total_new_files + total_existed_files
         
         if total_files == 0:
-            print("未找到任何GESP文件")
+            print("未找到任何GESP/CSP/NOI文件")
             return
         
-        print(f"找到 {total_files} 个GESP文件，其中 {total_new_files} 个需要拷贝，{total_existed_files} 个已存在")
+        print(f"找到 {total_files} 个相关文件，其中 {total_new_files} 个需要拷贝，{total_existed_files} 个已存在")
         
         if total_new_files == 0:
             print("没有需要拷贝的新文件")
@@ -700,9 +742,6 @@ class GESPFileOrganizer:
             print(f"错误: 源目录不存在 - {self.source_dir}")
             return {}, {}
         
-        # 创建目标根目录（如果不存在）
-        self.target_dir.mkdir(parents=True, exist_ok=True)
-        
         # 分析文件
         copy_plan, existed_files_map = self.analyze_files()
         
@@ -711,20 +750,22 @@ class GESPFileOrganizer:
         total_files = total_new_files + total_existed_files
         
         if total_files == 0:
-            print("未找到任何GESP文件")
+            print("未找到任何GESP/CSP/NOI文件")
             return {}, {}
         
-        print(f"找到 {total_files} 个GESP文件")
+        print(f"找到 {total_files} 个相关文件")
         print()
         
-        # 输出预览结果 - 默认只显示将被拷贝的文件
+        # 输出预览结果
         if copy_plan:
             print(f"📝 将被拷贝的新文件 ({total_new_files} 个):")
             for subdir, files in sorted(copy_plan.items()):
-                # 检查是否为CSP文件
                 if subdir.startswith("_csp/"):
                     csp_subdir = subdir[len("_csp/"):]
                     print(f"\n📁 [CSP] {csp_subdir}/ ({len(files)} 个新文件)")
+                elif subdir.startswith("_noip/"):
+                    noip_subdir = subdir[len("_noip/"):]
+                    print(f"\n📁 [NOIP] {noip_subdir}/ ({len(files)} 个新文件)")
                 else:
                     print(f"\n📁 {subdir}/ ({len(files)} 个新文件)")
                 for file_path, filename in sorted(files, key=lambda x: x[1]):
@@ -732,20 +773,9 @@ class GESPFileOrganizer:
         else:
             print("🚀 没有需要拷贝的新文件")
         
-        # 询问用户是否需要查看已存在的文件
-        if existed_files_map:
-            print(f"\n🔍 发现 {total_existed_files} 个已存在的文件（将被跳过）")
-            show_existed = input("是否需要查看已存在文件的详细信息？(y/N): ").strip().lower()
-            
-            if show_existed in ['y', 'yes', 'Y', 'YES', '是', 'y', 'Y']:
-                print(f"\n📋 已存在的文件（将被跳过）:")
-                for subdir, files in sorted(existed_files_map.items()):
-                    print(f"\n📁 {subdir}/ ({len(files)} 个已存在文件)")
-                    for filename in sorted(files):
-                        print(f"  ⊝ {filename}")
-        
+        # 统计信息
         print(f"\n📊 统计信息:")
-        print(f"总共GESP文件: {total_files}")
+        print(f"总共相关文件: {total_files}")
         print(f"将被拷贝: {total_new_files}")
         print(f"已存在（跳过）: {total_existed_files}")
         
@@ -784,60 +814,27 @@ def main():
     print("2. 刷新缓存并使用")
     print("3. 不使用缓存（直接扫描文件系统）")
     
-    cache_choice = input("请选择缓存模式 (1/2/3, 默认1): ").strip() or "1"
+    cache_choice = input("请选择缓存模式 (1/2/3, default 1): ").strip() or "1"
     
     if cache_choice == "2":
         organizer.refresh_cache_from_filesystem()
     elif cache_choice == "3":
         organizer.use_cache = False
-        print("已禁用缓存，将直接扫描文件系统")
-    else:
-        print(f"使用缓存模式（缓存文件: {organizer.cache_file}）")
+        print("已禁用缓存")
     
     # 选择操作模式
     print("\n请选择操作模式:")
     print("1. 预览后再执行拷贝（默认）")
     print("2. 直接执行文件拷贝")
     
-    choice = input("请输入选择 (1/2, 默认1): ").strip() or "1"
+    choice = input("请输入选择 (1/2, default 1): ").strip() or "1"
     
     if choice == "2":
-        # 直接执行拷贝
         organizer.organize_files()
     elif choice == "1":
-        # 预览后询问是否执行
-        copy_plan, existed_files_map = organizer.analyze_files()
+        copy_plan, existed_files_map = organizer.preview_organization()
         
         total_new_files = sum(len(files) for files in copy_plan.values())
-        total_existed_files = sum(len(files) for files in existed_files_map.values())
-        total_files = total_new_files + total_existed_files
-        
-        if total_files == 0:
-            print("未找到任何GESP文件")
-            return
-        
-        print(f"找到 {total_files} 个GESP文件")
-        print()
-        
-        # 输出预览结果
-        if copy_plan:
-            print(f"📝 将被拷贝的新文件 ({total_new_files} 个):")
-            for subdir, files in sorted(copy_plan.items()):
-                # 检查是否为CSP文件
-                if subdir.startswith("_csp/"):
-                    csp_subdir = subdir[len("_csp/"):]
-                    print(f"\n📁 [CSP] {csp_subdir}/ ({len(files)} 个新文件)")
-                else:
-                    print(f"\n📁 {subdir}/ ({len(files)} 个新文件)")
-                for file_path, filename in sorted(files, key=lambda x: x[1]):
-                    print(f"  [OK] {filename}")
-        else:
-            print("🚀 没有需要拷贝的新文件")
-        
-        print(f"\n📊 统计信息:")
-        print(f"总共GESP文件: {total_files}")
-        print(f"将被拷贝: {total_new_files}")
-        print(f"已存在（跳过）: {total_existed_files}")
         
         if total_new_files > 0:
             print("\n" + "=" * 60)
@@ -847,27 +844,16 @@ def main():
                 print("\n开始执行文件拷贝...")
                 copied_files = organizer.execute_copy_plan(copy_plan)
                 
-                organizer.stats["existed"] = total_existed_files
-                
                 # 自动运行格式化脚本
-                if organizer.stats['copied'] > 0 and copied_files:
-                    print(f"\n🎯 检测到 {organizer.stats['copied']} 个文件被成功拷贝，将自动运行格式化脚本...")
-                    
+                if copied_files:
+                    print(f"\n🎯 检测到 {len(copied_files)} 个文件被成功拷贝，将自动运行格式化脚本...")
                     run_formatter = input("是否要运行 formater.py 格式化拷贝的文件头？(Y/n): ").strip().lower() or "y"
-                    
                     if run_formatter not in ['n', 'no', 'N', 'NO', '否']:
-                        if organizer.run_formatter(copied_files):
-                            print("\n🎉 文件拷贝和格式化流程全部完成！")
-                        else:
-                            print("\n⚠️ 文件拷贝完成，但格式化过程中出现了问题。")
-                    else:
-                        print("\n✅ 文件拷贝完成（跳过格式化）。")
-                else:
-                    print("\n💡 没有新文件被拷贝，无需运行格式化脚本。")
+                        organizer.run_formatter(copied_files)
             else:
-                print("✅ 操作已取消，仅完成预览。")
+                print("✅ 操作已取消。")
         else:
-            print("\n💡 没有需要拷贝的新文件，无需执行拷贝操作。")
+            print("\n💡 没有需要拷贝的新文件。")
     else:
         print("无效选择")
 

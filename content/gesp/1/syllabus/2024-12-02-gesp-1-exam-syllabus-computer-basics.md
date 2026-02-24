@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 1. 计算机的基本构成
+title: (1) 计算机的基本构成
 date: "2024-12-02T13:00:00+0800"
 author: OneCoder
 comments: true

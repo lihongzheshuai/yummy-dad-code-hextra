@@ -89,24 +89,31 @@ menu:
       pageRef: /csp/j
       weight: 13
       parent: CSP
+    - name: NOI相关
+      pageRef: /noirelated
+      weight: 200
+    - name: NOIP
+      pageRef: /noirelated/noip
+      weight: 201
+      parent: NOI相关    
     - name: Blog ↗
       url: "https://www.coderli.com/"
-      weight: 15
+      weight: 500
     - name: 投资 ↗
       url: "https://invest.coderli.com/"
-      weight: 16
+      weight: 501
     - name: About
       pageRef: /about
-      weight: 17
+      weight: 502
     - name: Tags  
       pageRef: /tags
-      weight: 18
+      weight: 503
     - name: Search
-      weight: 19
+      weight: 504
       params:
         type: search
     - name: GitHub
-      weight: 20
+      weight: 505
       url: "https://github.com/lihongzheshuai/yummy-code"
       params:
         icon: github

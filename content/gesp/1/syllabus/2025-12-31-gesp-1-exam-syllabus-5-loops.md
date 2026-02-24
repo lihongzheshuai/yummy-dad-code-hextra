@@ -23,7 +23,6 @@ mermaid: true
 > [!Tip]
 >
 > （12）掌握循环结构程序的编写，掌握 for、while、do-while 循环语句的使用以及 continue 语句和 break 语句在循环中的应用。
-{: .prompt-info}
 
 ***一级考点系列：***
 

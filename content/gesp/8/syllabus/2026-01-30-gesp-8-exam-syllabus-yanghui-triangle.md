@@ -19,24 +19,23 @@ math: true
 mermaid: true
 ---
 
-
+[!Tip]
 > **GESP C++ 八级考试大纲知识点梳理系列文章：**
 > 1. [计数原理：加法与乘法](https://www.coderli.com/gesp-8-exam-syllabus-counting-principles/)
 > 2. [排列与组合](https://www.coderli.com/gesp-8-exam-syllabus-permutations-combinations/)
 > 3. [杨辉三角与组合数](https://www.coderli.com/gesp-8-exam-syllabus-yanghui-triangle/)
 > 4. [倍增法](https://www.coderli.com/gesp-8-exam-syllabus-binary-lifting/)
 > 5. [代数与平面几何](https://www.coderli.com/gesp-8-exam-syllabus-algebra-geometry/)
-{: .prompt-tip}
 
 继上一篇我们探讨了[排列和组合](https://www.coderli.com/gesp-8-exam-syllabus-permutations-combinations/)之后，GESP C++八级大纲的第三条考点非常经典，它是计算机算法（尤其是动态规划）的重要入门案例。
 
+[!Tip]
 > （3）掌握杨辉三角形（又称帕斯卡三角形）的概念。
-{: .prompt-info}
 
 杨辉三角形（Yang Hui's Triangle），在西方称为帕斯卡三角形（Pascal's Triangle），是一个无限对称的数字三角形。它不仅在形式上优美，更蕴含了深厚的组合数学原理。
 
+> [!Warning]
 > 本人也是边学、边实验、边总结，且对考纲深度和广度的把握属于个人理解。因此本文更多的不是一个教程，而是个人知识梳理，如有遗漏、疏忽，欢迎指正、交流。
-{: .prompt-warning}
 
 ## 一、杨辉三角的概念与构造
 

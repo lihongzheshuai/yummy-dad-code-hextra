@@ -168,9 +168,9 @@ for (int x = 0; x <= 20; x++) {
 
 ## 四、break 和 continue 在嵌套中的表现
 
+> [!Warning]
 > **`break` 和 `continue` 只对它所在的“那一层”循环有效！**
 > 它**不能**直接跳出多层循环。
-{: .prompt-warning}
 
 ```cpp
 for (int i = 1; i <= 3; i++) {

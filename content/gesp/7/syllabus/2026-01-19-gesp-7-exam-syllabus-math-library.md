@@ -38,8 +38,8 @@ GESP C++七级考试大纲中共有`4`条考点，第`1`条考点要求我们熟
 #include <bits/stdc++.h>
 ```
 
+> [!Warning]
 > ⚠️ **注意**：`<cmath>` 中的函数参数和返回值通常都是 `double` 类型（浮点数）。在涉及整数运算时要小心精度丢失问题，或者显式进行类型转换。
-{: .prompt-danger}
 
 ---
 
@@ -108,9 +108,9 @@ int main() {
 | `log10(x)` | 常用对数，底数为 10 | $\lg(x)$ 或 $\log_{10}(x)$ | 考纲重点 |
 | `log2(x)` | 二进制对数，底数为 2 | $\log_2(x)$ | 考纲重点，常用于计算完全二叉树高度 |
 
+> [!Tip]
 > 💡 **小贴士**：如果需要计算任意底数 $a$ 的对数 $\log_a(b)$，可以使用换底公式：
 > $$ \log_a(b) = \frac{\ln(b)}{\ln(a)} \quad \Rightarrow \quad \text{code: } \texttt{log(b) / log(a)} $$
-{: .prompt-tip}
 
 ### 2.2 代码示例
 

@@ -20,6 +20,7 @@ math: true
 mermaid: true
 ---
 
+> [!Tip]
 > **GESP C++ 八级考试大纲知识点梳理系列文章：**
 > 1. [计数原理：加法与乘法](https://www.coderli.com/gesp-8-exam-syllabus-counting-principles/)
 > 2. [排列与组合](https://www.coderli.com/gesp-8-exam-syllabus-permutations-combinations/)
@@ -28,16 +29,15 @@ mermaid: true
 > 5. [代数与平面几何](https://www.coderli.com/gesp-8-exam-syllabus-algebra-geometry/)
 > 6. [图论算法：最小生成树与最短路](https://www.coderli.com/gesp-8-exam-syllabus-graph-theory/)
 > 7. [算法的时间和空间效率分析](https://www.coderli.com/gesp-8-exam-syllabus-complexity-analysis/)
-{: .prompt-tip}
 
 本篇我们来攻克 GESP 八级考纲中分量极重的一块内容——**图论算法**。图论是算法竞赛中的核心版块，八级主要通过最经典的**最小生成树**和**最短路径**问题来考察大家对图结构的理解和算法实现能力。
 
+> [!Tip]
 > **考纲要求：**
 > (6) 掌握图论算法及综合应用技巧。包括最小生成树的概念、Kruskal 算法、Prim 算法，掌握最短路径的概念、单源最短路径的 Dijkstra 算法、Floyd 算法等。理解实现同一功能的不同算法的比较，并可以灵活解决相关问题。
-{: .prompt-info}
 
+> [!Warning]
 > 本人也是边学、边实验、边总结，且对考纲深度和广度的把握属于个人理解。因此本文更多的不是一个教程，而是个人知识梳理，如有遗漏、疏忽，欢迎指正、交流。
-{: .prompt-warning}
 
 ---
 

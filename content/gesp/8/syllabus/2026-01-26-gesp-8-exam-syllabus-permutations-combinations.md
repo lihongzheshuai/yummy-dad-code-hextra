@@ -19,24 +19,23 @@ math: true
 mermaid: true
 ---
 
-
+> [!Tip]
 > **GESP C++ 八级考试大纲知识点梳理系列文章：**
 > 1. [计数原理：加法与乘法](https://www.coderli.com/gesp-8-exam-syllabus-counting-principles/)
 > 2. [排列与组合](https://www.coderli.com/gesp-8-exam-syllabus-permutations-combinations/)
 > 3. [杨辉三角与组合数](https://www.coderli.com/gesp-8-exam-syllabus-yanghui-triangle/)
 > 4. [倍增法](https://www.coderli.com/gesp-8-exam-syllabus-binary-lifting/)
 > 5. [代数与平面几何](https://www.coderli.com/gesp-8-exam-syllabus-algebra-geometry/)
-{: .prompt-tip}
 
 继上一篇我们探讨了计数原理（加法与乘法原理）之后，GESP 八级考纲的第二个重要考点便是**排列与组合**。
 
+> [!Tip]
 > （2）掌握排列与组合基础知识。包括排列、组合的基本概念，及能实现基础排列和组合编程问题的一般方法。
-{: .prompt-info}
 
 排列和组合是计数原理的具体应用，也是解决很多复杂算法问题（如概率计算、容斥原理）的工具。
 
+> [!Warning]
 > 本人也是边学、边实验、边总结，且对考纲深度和广度的把握属于个人理解。因此本文更多的不是一个教程，而是个人知识梳理，如有遗漏、疏忽，欢迎指正、交流。
-{: .prompt-warning}
 
 ## 一、基本概念与公式
 

@@ -63,8 +63,8 @@ C++ 是**强类型语言**，这意味着每个变量都有固定的类型，不
 **转换链条**：
 `char` / `short` $\rightarrow$ `int` $\rightarrow$ `long long` $\rightarrow$ `float` $\rightarrow$ `double`
 
+> [!Tip]
 > 只要表达式中有一个 **`double`**，整个表达式的运算结果通常就会变成 **`double`**。
-{: .prompt-tip}
 
 ### 2.2 常见触发场景
 

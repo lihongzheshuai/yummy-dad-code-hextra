@@ -19,24 +19,23 @@ math: true
 mermaid: true
 ---
 
-
+> [!Tip]
 > **GESP C++ 八级考试大纲知识点梳理系列文章：**
 > 1. [计数原理：加法与乘法](https://www.coderli.com/gesp-8-exam-syllabus-counting-principles/)
 > 2. [排列与组合](https://www.coderli.com/gesp-8-exam-syllabus-permutations-combinations/)
 > 3. [杨辉三角与组合数](https://www.coderli.com/gesp-8-exam-syllabus-yanghui-triangle/)
 > 4. [倍增法](https://www.coderli.com/gesp-8-exam-syllabus-binary-lifting/)
 > 5. [代数与平面几何](https://www.coderli.com/gesp-8-exam-syllabus-algebra-geometry/)
-{: .prompt-tip}
 
 继上一篇我们探讨了[杨辉三角与组合数](https://www.coderli.com/gesp-8-exam-syllabus-yanghui-triangle/)之后，我们继续深入 GESP C++ 八级大纲。今天的主角是算法竞赛中极其常用且高效的思想——**倍增法**。
 
+> [!Tip]
 > （4）掌握倍增法概念。了解倍增法的时间复杂度。
-{: .prompt-info}
 
 倍增法（Doubling Method）不仅仅是一个特定的算法，更像是一种“思想”。它的核心在于“**成倍增长**”，利用二进制的性质，将线性级别的处理转化为对数级别的处理，极大地优化了时间复杂度。
 
+> [!Warning]
 > 本人也是边学、边实验、边总结，且对考纲深度和广度的把握属于个人理解。因此本文更多的不是一个教程，而是个人知识梳理，如有遗漏、疏忽，欢迎指正、交流。
-{: .prompt-warning}
 
 ## 一、什么是倍增法？
 

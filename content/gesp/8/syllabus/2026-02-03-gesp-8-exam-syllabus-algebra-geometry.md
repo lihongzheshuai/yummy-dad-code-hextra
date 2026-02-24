@@ -19,24 +19,23 @@ math: true
 mermaid: true
 ---
 
-
+> [!Tip]
 > **GESP C++ 八级考试大纲知识点梳理系列文章：**
 > 1. [计数原理：加法与乘法](https://www.coderli.com/gesp-8-exam-syllabus-counting-principles/)
 > 2. [排列与组合](https://www.coderli.com/gesp-8-exam-syllabus-permutations-combinations/)
 > 3. [杨辉三角与组合数](https://www.coderli.com/gesp-8-exam-syllabus-yanghui-triangle/)
 > 4. [倍增法](https://www.coderli.com/gesp-8-exam-syllabus-binary-lifting/)
 > 5. [代数与平面几何](https://www.coderli.com/gesp-8-exam-syllabus-algebra-geometry/)
-{: .prompt-tip}
 
 继上一篇我们探讨了[倍增法](https://www.coderli.com/gesp-8-exam-syllabus-binary-lifting/)之后，我们继续深入 GESP C++ 八级大纲。今天我们来聊聊编程中必不可少的数学基础——**代数与平面几何**。
 
+> [!Tip]
 > (5)掌握代数与平面几何基础知识（初中数学部分）。包括方程的概念及一元一次方程、二元一次方程的基本求解技巧，求基础平面几何概念、求基本图形（如长方形、三角形、圆形等）的面积等
-{: .prompt-info}
 
 虽然 GESP 是编程考试，但数学是算法的基石。在八级考试中，代数和几何通常不会像数学卷子那样考证明题，而是考查**利用计算机计算公式的能力**以及**将几何/代数问题转化为代码逻辑的能力**。
 
+> [!Warning]
 > 本人也是边学、边实验、边总结，且对考纲深度和广度的把握属于个人理解。因此本文更多的不是一个教程，而是个人知识梳理，如有遗漏、疏忽，欢迎指正、交流。
-{: .prompt-warning}
 
 ## 一、代数基础：方程与求解
 

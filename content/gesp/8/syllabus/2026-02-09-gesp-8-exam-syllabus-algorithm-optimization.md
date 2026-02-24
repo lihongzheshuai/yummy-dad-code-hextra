@@ -19,6 +19,7 @@ math: true
 mermaid: true
 ---
 
+> [!Tip]
 > **GESP C++ 八级考试大纲知识点梳理系列文章：**
 > 1. [计数原理：加法与乘法](https://www.coderli.com/gesp-8-exam-syllabus-counting-principles/)
 > 2. [排列与组合](https://www.coderli.com/gesp-8-exam-syllabus-permutations-combinations/)
@@ -28,16 +29,15 @@ mermaid: true
 > 6. [图论算法：最小生成树与最短路](https://www.coderli.com/gesp-8-exam-syllabus-graph-theory/)
 > 7. [算法的时间和空间效率分析](https://www.coderli.com/gesp-8-exam-syllabus-complexity-analysis/)
 > 8. [算法优化技巧](https://www.coderli.com/gesp-8-exam-syllabus-algorithm-optimization/)
-{: .prompt-tip}
 
 在 GESP 八级考试中，最后一项考点是对 **算法优化** 的综合考察。这不仅仅是学会某个具体的算法，更是要求我们具备一种 **“多想一步”** 的思维能力：当暴力解法行不通时，如何通过数学、数据结构或算法策略来提升效率，把 $O(N^2)$ 优化到 $O(N \log N)$ 甚至 $O(N)$。
 
+> [!Tip]
 > **考纲要求：**
 > (8) 算法优化。理解不同方法求解一个问题在时间复杂度和空间复杂度上的差异，理解使用数学知识辅助求解问题的技巧（如可以用循环求出等差数列的和，也可以用数学公式求出等差数列的和），掌握一般的算法优化技巧。
-{: .prompt-info}
 
+> [!Warning]
 > 本人也是边学、边实验、边总结，且对考纲深度和广度的把握属于个人理解。因此本文更多的不是一个教程，而是个人知识梳理，如有遗漏、疏忽，欢迎指正、交流。
-{: .prompt-warning}
 
 本文将从三个维度来拆解常见的优化技巧：**数学优化**、**数据结构优化** 和 **算法策略优化**。
 

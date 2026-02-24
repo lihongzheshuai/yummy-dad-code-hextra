@@ -223,8 +223,8 @@ void bfs(int start) {
 }
 ```
 
+> [!Warning]
 > **易错点**：BFS 中 `vis[v] = true` 必须在**入队 (push) 时**标记，而不能在出队 (pop) 时标记。否则会导致同一个点被重复加入队列很多次，导致超时 (TLE)。
-{: .prompt-warning}
 
 ---
 

@@ -51,8 +51,8 @@ mermaid: true
 3. **`<cstdlib>`** (或 `<stdlib.h>`): 包含随机数相关的（rand, srand, abs(整数版)）。
 4. **`<ctime>`** (或 `<time.h>`): 用于获取时间种子（time）。
 
+> [!Tip]
 > 考试时如果不确定，可以直接使用万能头文件 `#include <bits/stdc++.h>`，但了解每个函数的归属是专业素养的体现。
-{: .prompt-tip}
 
 ---
 

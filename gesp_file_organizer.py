@@ -37,6 +37,9 @@ class GESPFileOrganizer:
         # NOIP文件应该迁移到与gesp同级的noirelated目录
         self.noirelated_target_dir = self.target_dir.parent / "noirelated" if self.target_dir.name == "gesp" else self.target_dir / "noirelated"
         
+        # 信奥业务科普文件应该迁移到与gesp同级的cs目录
+        self.cs_target_dir = self.target_dir.parent / "cs" if self.target_dir.name == "gesp" else self.target_dir / "cs"
+        
         # 缓存文件路径
         self.cache_file = Path(__file__).parent / ".gesp_file_cache.json"
         
@@ -120,6 +123,13 @@ class GESPFileOrganizer:
             for md_file in self.noirelated_target_dir.rglob("*.md"):
                 filename = md_file.name
                 relative_path = str(md_file.relative_to(self.noirelated_target_dir))
+                existed_files[filename] = relative_path
+        
+        # 递归扫描信奥业务科普目标目录
+        if self.cs_target_dir.exists():
+            for md_file in self.cs_target_dir.rglob("*.md"):
+                filename = md_file.name
+                relative_path = str(md_file.relative_to(self.cs_target_dir))
                 existed_files[filename] = relative_path
         
         # 更新缓存
@@ -366,6 +376,25 @@ class GESPFileOrganizer:
             for existing_file in self.noirelated_target_dir.rglob(filename):
                 return str(existing_file.relative_to(self.noirelated_target_dir))
             return None
+            
+    def check_file_exists_in_cs_target(self, filename: str) -> Optional[str]:
+        """
+        检查文件是否在信奥业务科普目标路径下的任何位置存在
+        
+        Args:
+            filename: 文件名
+            
+        Returns:
+            如果文件存在，返回相对于信奥业务科普目标根目录的路径；否则返回None
+        """
+        if self.use_cache:
+            # 使用缓存查找
+            return self.cache.get("existed_files", {}).get(filename)
+        else:
+            # 直接从文件系统查找
+            for existing_file in self.cs_target_dir.rglob(filename):
+                return str(existing_file.relative_to(self.cs_target_dir))
+            return None
     
     def run_formatter(self, copied_files: Optional[List[str]] = None) -> bool:
         """
@@ -493,7 +522,7 @@ class GESPFileOrganizer:
                 
                 # 综合判断是否为目标文件
                 is_filename_match = self.is_gesp_file(filename)
-                is_category_match = any(keyword in categories_str for keyword in ['gesp', 'csp', 'noip', 'noi'])
+                is_category_match = any(keyword in categories_str for keyword in ['gesp', 'csp', 'noip', 'noi', '信奥业务科普'])
                 
                 if not (is_filename_match or is_category_match):
                     continue
@@ -501,6 +530,7 @@ class GESPFileOrganizer:
                 # 标记文件类型
                 is_csp_file = '-csp-' in filename.lower() or ('csp' in categories_str)
                 is_noip_file = '-noip-' in filename.lower() or ('noip' in categories_str) or ('noi' in categories_str)
+                is_cs_file = bool(categories) and str(categories[0]).strip() == '信奥业务科普'
                 
                 target_subdir = None
 
@@ -548,6 +578,12 @@ class GESPFileOrganizer:
                         year = "unknown"
                     
                     target_subdir = f"noip/{year}"
+                elif is_cs_file:
+                    if len(categories) > 1:
+                        cs_subdir = str(categories[1]).strip()
+                    else:
+                        cs_subdir = "others"
+                    target_subdir = f"{cs_subdir}"
                 else:
                     target_subdir = self.determine_subdirectory(frontmatter, filename)
                 
@@ -557,6 +593,8 @@ class GESPFileOrganizer:
                         existing_path = self.check_file_exists_in_csp_target(filename)
                     elif is_noip_file:
                         existing_path = self.check_file_exists_in_noirelated_target(filename)
+                    elif is_cs_file:
+                        existing_path = self.check_file_exists_in_cs_target(filename)
                     else:
                         existing_path = self.check_file_exists_in_target(filename)
                     
@@ -578,6 +616,11 @@ class GESPFileOrganizer:
                             if noip_key not in copy_plan:
                                 copy_plan[noip_key] = []
                             copy_plan[noip_key].append((file_path, filename))
+                        elif is_cs_file:
+                            cs_key = f"_cs/{target_subdir}"
+                            if cs_key not in copy_plan:
+                                copy_plan[cs_key] = []
+                            copy_plan[cs_key].append((file_path, filename))
                         else:
                             if target_subdir not in copy_plan:
                                 copy_plan[target_subdir] = []
@@ -627,7 +670,10 @@ class GESPFileOrganizer:
                     target_path = target_base_dir / final_subdir / filename
                     
                     # 创建目标目录
-                    target_path.parent.mkdir(parents=True, exist_ok=True)
+                    if not target_path.parent.exists():
+                        target_path.parent.mkdir(parents=True, exist_ok=True)
+                        if target_subdir.startswith("_cs/"):
+                            self.generate_index_md_with_gemini(target_path.parent, final_subdir)
                     
                     # 拷贝文件
                     shutil.copy2(source_file_path, target_path)
@@ -667,6 +713,74 @@ class GESPFileOrganizer:
             self.save_cache()
         
         return copied_files
+
+    def generate_index_md_with_gemini(self, dir_path: Path, topic: str) -> None:
+        """调用Gemini CLI生成_index.md文件"""
+        index_file = dir_path / "_index.md"
+        if index_file.exists():
+            return
+            
+        print(f"    正在调用Gemini CLI为目录生成 _index.md: {dir_path}")
+        prompt = f"请为 Hugo 的 docsy 站点创建一个 _index.md 文件，标题为'{topic}'。只需要返回front matter和一点简单的内容，不要多余的解释，直接给出文件内容。"
+        try:
+            cmd_name = "gemini.cmd" if os.name == 'nt' else "gemini"
+            result = subprocess.run(
+                [cmd_name, "--output-format", "json", prompt],
+                capture_output=True,
+                text=True,
+                check=True,
+                encoding='utf-8'
+            )
+            data = json.loads(result.stdout)
+            content = data.get("response", "")
+            
+            if content.startswith("```markdown"):
+                content = content[11:]
+            elif content.startswith("```"):
+                content = content[3:]
+            if content.endswith("```"):
+                content = content[:-3]
+                
+            content = content.strip() + "\n"
+            
+            with open(index_file, 'w', encoding='utf-8') as f:
+                f.write(content)
+            print(f"    [OK] 生成 _index.md 成功")
+        except Exception as e:
+            print(f"    ⚠️  生成 _index.md 失败: {e}")
+
+    def run_formatter_with_gemini(self, copied_files: List[str]) -> None:
+        """调用 Gemini CLI 对拷贝的文件进行格式化"""
+        print(f"\n调用 Gemini CLI 对 {len(copied_files)} 个文件进行智能格式化...")
+        for file_path in copied_files:
+            print(f"  正在格式化: {Path(file_path).name}")
+            prompt = f"请读取文件 @{file_path} 的内容。只需对前置数据(front matter)进行格式化规范化（包含 title, date, categories, tags），不要修改正文内容。请直接输出完整的文件内容，不要输出任何额外的解释文本和markdown代码块反引号。"
+            try:
+                cmd_name = "gemini.cmd" if os.name == 'nt' else "gemini"
+                result = subprocess.run(
+                    [cmd_name, "--output-format", "json", prompt],
+                    capture_output=True,
+                    text=True,
+                    check=True,
+                    encoding='utf-8'
+                )
+                data = json.loads(result.stdout)
+                content = data.get("response", "")
+                
+                if content.startswith("```markdown"):
+                    content = content[11:]
+                elif content.startswith("```"):
+                    content = content[3:]
+                if content.endswith("```"):
+                    content = content[:-3]
+                    
+                content = content.strip() + "\n"
+                
+                with open(file_path, 'w', encoding='utf-8') as f:
+                    f.write(content)
+                print(f"  [OK] 格式化成功")
+            except Exception as e:
+                print(f"  ⚠️  格式化失败: {e}")
     
     def organize_files(self) -> None:
         """执行文件整理"""
@@ -713,17 +827,24 @@ class GESPFileOrganizer:
         
         # 如果有文件被拷贝，自动运行格式化脚本
         if self.stats['copied'] > 0 and copied_files:
-            print(f"\n🎯 检测到 {self.stats['copied']} 个文件被成功拷贝，将自动运行格式化脚本...")
+            print(f"\n🎯 检测到 {self.stats['copied']} 个文件被成功拷贝，准备进行格式化...")
             
-            # 询问用户是否要运行格式化脚本
-            run_formatter = input("是否要运行 formater.py 格式化拷贝的文件头？(Y/n): ").strip().lower() or "y"
+            print("请选择格式化方式:")
+            print("1. 运行内置 formater.py 脚本 (默认)")
+            print("2. 调用 Gemini CLI 智能格式化")
+            print("3. 跳过格式化")
             
-            if run_formatter not in ['n', 'no', 'N', 'NO', '否']:
+            format_choice = input("请输入选择 (1/2/3): ").strip() or "1"
+            
+            if format_choice == "1":
                 # 运行格式化脚本，传递已拷贝的文件列表
                 if self.run_formatter(copied_files):
                     print("\n🎉 文件拷贝和格式化流程全部完成！")
                 else:
                     print("\n⚠️ 文件拷贝完成，但格式化过程中出现了问题。")
+            elif format_choice == "2":
+                self.run_formatter_with_gemini(copied_files)
+                print("\n🎉 文件拷贝和格式化流程全部完成！")
             else:
                 print("\n✅ 文件拷贝完成（跳过格式化）。")
         else:
@@ -766,6 +887,9 @@ class GESPFileOrganizer:
                 elif subdir.startswith("_noip/"):
                     noip_subdir = subdir[len("_noip/"):]
                     print(f"\n📁 [NOIP] {noip_subdir}/ ({len(files)} 个新文件)")
+                elif subdir.startswith("_cs/"):
+                    cs_subdir = subdir[len("_cs/"):]
+                    print(f"\n📁 [信奥业务科普] {cs_subdir}/ ({len(files)} 个新文件)")
                 else:
                     print(f"\n📁 {subdir}/ ({len(files)} 个新文件)")
                 for file_path, filename in sorted(files, key=lambda x: x[1]):
@@ -846,10 +970,21 @@ def main():
                 
                 # 自动运行格式化脚本
                 if copied_files:
-                    print(f"\n🎯 检测到 {len(copied_files)} 个文件被成功拷贝，将自动运行格式化脚本...")
-                    run_formatter = input("是否要运行 formater.py 格式化拷贝的文件头？(Y/n): ").strip().lower() or "y"
-                    if run_formatter not in ['n', 'no', 'N', 'NO', '否']:
+                    print(f"\n🎯 检测到 {len(copied_files)} 个文件被成功拷贝，准备进行格式化...")
+                    
+                    print("请选择格式化方式:")
+                    print("1. 运行内置 formater.py 脚本 (默认)")
+                    print("2. 调用 Gemini CLI 智能格式化")
+                    print("3. 跳过格式化")
+                    
+                    format_choice = input("请输入选择 (1/2/3): ").strip() or "1"
+                    
+                    if format_choice == "1":
                         organizer.run_formatter(copied_files)
+                    elif format_choice == "2":
+                        organizer.run_formatter_with_gemini(copied_files)
+                    else:
+                        print("\n✅ 已跳过格式化。")
             else:
                 print("✅ 操作已取消。")
         else:

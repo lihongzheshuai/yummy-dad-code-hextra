@@ -95,7 +95,14 @@ menu:
     - name: NOIP
       pageRef: /noirelated/noip
       weight: 201
-      parent: NOI相关    
+      parent: NOI相关
+    - name: 信奥科普
+      pageRef: /cs
+      weight: 300
+    - name: 计算机历史
+      pageRef: /cs/history
+      weight: 301
+      parent: 信奥科普    
     - name: Blog ↗
       url: "https://www.coderli.com/"
       weight: 500

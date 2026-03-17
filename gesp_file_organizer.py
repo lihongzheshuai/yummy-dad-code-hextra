@@ -304,7 +304,7 @@ class GESPFileOrganizer:
     
     def is_gesp_file(self, filename: str) -> bool:
         """
-        检查文件是否符合GESP文件命名规则
+        检查文件是否符合整理规则（GESP/CSP/NOI/信奥业务科普）
         
         Args:
             filename: 文件名
@@ -312,13 +312,19 @@ class GESPFileOrganizer:
         Returns:
             是否符合规则
         """
-        # 检查文件名格式：yyyy-MM-dd-gesp-*.md 或包含csp-的文件
-        gesp_pattern = r'^\d{4}-\d{2}-\d{2}-gesp-.*\.md$'
-        csp_pattern = r'^\d{4}-\d{2}-\d{2}-.*csp-.*\.md$'
-        noip_pattern = r'^\d{4}-\d{2}-\d{2}-.*noip-.*\.md$'
-        # 增加对gesp-secrets系列的支持
-        secrets_pattern = r'.*gesp-secrets.*\.md$'
-        return bool(re.match(gesp_pattern, filename) or re.match(csp_pattern, filename) or re.match(secrets_pattern, filename) or re.match(noip_pattern, filename))
+        # 基本日期格式：yyyy-MM-dd-*.md
+        date_prefix = r'^\d{4}-\d{2}-\d{2}-'
+        
+        # 各类标识匹配
+        patterns = [
+            date_prefix + r'.*gesp-.*\.md$',
+            date_prefix + r'.*csp-.*\.md$',
+            date_prefix + r'.*noi.*\.md$',    # 包含 noip, noi-p, noi-s 等
+            date_prefix + r'.*cs-.*\.md$',     # 可能的信奥业务科普标识
+            r'.*gesp-secrets.*\.md$'           # 特殊系列
+        ]
+        
+        return any(re.match(p, filename, re.IGNORECASE) for p in patterns)
     
     def check_file_exists_in_target(self, filename: str) -> Optional[str]:
         """
@@ -522,7 +528,7 @@ class GESPFileOrganizer:
                 
                 # 综合判断是否为目标文件
                 is_filename_match = self.is_gesp_file(filename)
-                is_category_match = any(keyword in categories_str for keyword in ['gesp', 'csp', 'noip', 'noi', '信奥业务科普'])
+                is_category_match = any(keyword in categories_str for keyword in ['gesp', 'csp', 'noip', 'noi', '信奥业务科普', '信奥业余科普'])
                 
                 if not (is_filename_match or is_category_match):
                     continue
@@ -530,7 +536,7 @@ class GESPFileOrganizer:
                 # 标记文件类型
                 is_csp_file = '-csp-' in filename.lower() or ('csp' in categories_str)
                 is_noip_file = '-noip-' in filename.lower() or ('noip' in categories_str) or ('noi' in categories_str)
-                is_cs_file = bool(categories) and str(categories[0]).strip() == '信奥业务科普'
+                is_cs_file = bool(categories) and str(categories[0]).strip() in ['信奥业务科普', '信奥业余科普']
                 
                 target_subdir = None
 
@@ -581,6 +587,8 @@ class GESPFileOrganizer:
                 elif is_cs_file:
                     if len(categories) > 1:
                         cs_subdir = str(categories[1]).strip()
+                        if cs_subdir == "计算机历史":
+                            cs_subdir = "history"
                     else:
                         cs_subdir = "others"
                     target_subdir = f"{cs_subdir}"
@@ -660,6 +668,11 @@ class GESPFileOrganizer:
                 print(f"📁 拷贝到 NOIP目录 {noip_subdir}/ ({len(files)} 个文件)")
                 target_base_dir = self.noirelated_target_dir
                 final_subdir = noip_subdir
+            elif target_subdir.startswith("_cs/"):
+                cs_subdir = target_subdir[len("_cs/"):]
+                print(f"📁 拷贝到 信奥业务科普目录 {cs_subdir}/ ({len(files)} 个文件)")
+                target_base_dir = self.cs_target_dir
+                final_subdir = cs_subdir
             else:
                 print(f"📁 拷贝到 {target_subdir}/ ({len(files)} 个文件)")
                 target_base_dir = self.target_dir
@@ -672,8 +685,6 @@ class GESPFileOrganizer:
                     # 创建目标目录
                     if not target_path.parent.exists():
                         target_path.parent.mkdir(parents=True, exist_ok=True)
-                        if target_subdir.startswith("_cs/"):
-                            self.generate_index_md_with_gemini(target_path.parent, final_subdir)
                     
                     # 拷贝文件
                     shutil.copy2(source_file_path, target_path)

@@ -34,6 +34,12 @@ toc: false
 {{< card link="noirelated/noip/" title="NOIP" icon="book-open" >}}
 {{< /cards >}}
 
+## 信奥科普相关
+
+{{< cards >}}
+{{< card link="cs/history/" title="01.计算机历史" icon="book-open" >}}
+{{< /cards >}}
+
 ## 其他
 
 {{< cards >}}

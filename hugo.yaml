@@ -102,7 +102,11 @@ menu:
     - name: 计算机历史
       pageRef: /cs/history
       weight: 301
-      parent: 信奥科普    
+      parent: 信奥科普
+    - name: C++的奇妙之旅
+      pageRef: /cs/cpp
+      weight: 302
+      parent: 信奥科普      
     - name: Blog ↗
       url: "https://www.coderli.com/"
       weight: 500

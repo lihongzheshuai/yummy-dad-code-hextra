@@ -38,6 +38,7 @@ toc: false
 
 {{< cards >}}
 {{< card link="cs/history/" title="01.计算机历史" icon="book-open" >}}
+{{< card link="cs/cpp/" title="02.C++的奇妙之旅" icon="book-open" >}}
 {{< /cards >}}
 
 ## 其他

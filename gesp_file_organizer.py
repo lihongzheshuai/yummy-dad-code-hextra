@@ -585,7 +585,10 @@ class GESPFileOrganizer:
                     
                     target_subdir = f"noip/{year}"
                 elif is_cs_file:
-                    if len(categories) > 1:
+                    # 检查二级分类是否包含"C++的奇妙之旅"或"C++奇妙之旅"
+                    if len(categories) > 1 and ('C++奇妙之旅' in str(categories[1]) or 'C++的奇妙之旅' in str(categories[1])):
+                        cs_subdir = "cpp"
+                    elif len(categories) > 1:
                         cs_subdir = str(categories[1]).strip()
                         if cs_subdir == "计算机历史":
                             cs_subdir = "history"

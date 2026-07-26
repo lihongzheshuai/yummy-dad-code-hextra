@@ -535,26 +535,33 @@ class GESPFileOrganizer:
 
                 # 标记文件类型
                 is_csp_file = '-csp-' in filename.lower() or ('csp' in categories_str)
+                is_csp_x_file = '-csp-x-' in filename.lower() or ('csp-x' in filename.lower())
                 is_noip_file = '-noip-' in filename.lower() or ('noip' in categories_str) or ('noi' in categories_str)
                 is_cs_file = bool(categories) and str(categories[0]).strip() in ['信奥业务科普', '信奥业余科普']
                 
                 target_subdir = None
 
                 # 对于CSP文件，使用特殊的目标目录逻辑
-                if is_csp_file:
+                if is_csp_file or is_csp_x_file:
                     target_subdir = 'others'  # 默认CSP目录
                     
                     tags = frontmatter.get('tags', [])
                     tags_str = ''.join(str(tag) for tag in tags).lower()
                     title = frontmatter.get('title', '')
                     
+                    # 检查是否为CSP-X文件（文件名包含csp-x）
+                    if is_csp_x_file:
+                        if '真题' in title or '真题' in tags_str:
+                            target_subdir = 'xl/realexam'
+                        else:
+                            target_subdir = 'xl'
                     # 检查是否为CSP-J
-                    if 'csp' in categories_str and 'j' in categories_str:
+                    elif 'csp' in categories_str and 'j' in categories_str:
                         if '真题' in title or '真题' in tags_str:
                             target_subdir = 'j/realexam'
                         else:
                             target_subdir = 'j'
-                    # 检查是否为CSP XL真题
+                    # 检查是否为CSP XL真题（通过categories判断）
                     elif 'xl' in categories_str and '真题' in title:
                         target_subdir = 'xl/realexam'
                     
@@ -600,7 +607,7 @@ class GESPFileOrganizer:
                 
                 if target_subdir:
                     # 检查文件是否在目标根路径下的任何位置已存在
-                    if is_csp_file:
+                    if is_csp_file or is_csp_x_file:
                         existing_path = self.check_file_exists_in_csp_target(filename)
                     elif is_noip_file:
                         existing_path = self.check_file_exists_in_noirelated_target(filename)
@@ -617,7 +624,7 @@ class GESPFileOrganizer:
                         existed_files_map[existing_dir].append(f"{filename} (存在于: {existing_path})")
                     else:
                         # 文件不存在，加入拷贝计划
-                        if is_csp_file:
+                        if is_csp_file or is_csp_x_file:
                             csp_key = f"_csp/{target_subdir}"
                             if csp_key not in copy_plan:
                                 copy_plan[csp_key] = []

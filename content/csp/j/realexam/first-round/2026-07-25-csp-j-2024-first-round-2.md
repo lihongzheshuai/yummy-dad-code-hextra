@@ -18,7 +18,7 @@ type: docs
 weight: 22
 math: true
 aliases:
-  - /csp/j/realexam/2026-07-25-csp-j-2024-first-round-2/
+  - /csp/j/realexam/csp-j-2024-first-round-2/
 ---
 
 2024 年 CSP-J（入门级）第一轮认证于 2024 年 9 月 21 日举行。继上一篇单项选择题解析后，本文为您带来**第二部分：阅读程序题（共 3 大题，计 40 分）**的逐题源码分析、逻辑推理与深度全解析。

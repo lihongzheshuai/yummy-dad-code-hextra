@@ -18,7 +18,7 @@ type: docs
 weight: 11
 math: true
 aliases:
-  - /csp/j/realexam/2026-04-09-csp-j-2019-first-round-2/
+  - /csp/j/realexam/csp-j-2019-first-round-2/
 ---
 
 继上一篇单项选择题的全面解析后，本文我们将进入 CSP 初赛试卷中拉开分差的核心板块——**阅读程序题**。

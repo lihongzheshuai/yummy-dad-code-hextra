@@ -17,7 +17,7 @@ type: docs
 weight: 21
 math: true
 aliases:
-  - /csp/j/realexam/2026-07-24-csp-j-2024-first-round-1/
+  - /csp/j/realexam/csp-j-2024-first-round-1/
 ---
 
 2024 年 CSP-J（入门级）第一轮认证于 2024 年 9 月 21 日举行。本年度试卷延续了CSP初赛一贯的考查风格，涵盖了**计算机基础**、**数据类型与存储**、**进制转换**、**组合数学**、**C++ 语法基础**、**数据结构**和**图论入门**等多个核心领域。

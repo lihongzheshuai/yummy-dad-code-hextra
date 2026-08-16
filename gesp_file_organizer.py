@@ -558,7 +558,11 @@ class GESPFileOrganizer:
                     # 检查是否为CSP-J
                     elif 'csp' in categories_str and 'j' in categories_str:
                         if '真题' in title or '真题' in tags_str:
-                            target_subdir = 'j/realexam'
+                            # 检查文件名是否包含first-round
+                            if 'first-round' in filename.lower():
+                                target_subdir = 'j/realexam/first-round'
+                            else:
+                                target_subdir = 'j/realexam/second-round'
                         else:
                             target_subdir = 'j'
                     # 检查是否为CSP XL真题（通过categories判断）

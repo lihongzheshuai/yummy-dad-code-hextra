@@ -16,6 +16,8 @@ slug: csp-j-2019-first-round-1
 type: docs
 weight: 8
 math: true
+aliases:
+  - /csp/j/realexam/2026-04-07-csp-j-2019-first-round-1/
 ---
 
 2019 年是 NOIP 转型为 CSP 的第一年，本年度的 CSP-J（入门级/普及组）初赛试卷难度适中，非常注重计算机的基础理论广度以及算法执行的模拟能力。

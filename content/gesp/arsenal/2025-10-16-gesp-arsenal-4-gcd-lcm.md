@@ -1,7 +1,6 @@
 ---
 layout: post
-title: "B3941 小杨的锻炼***](https://www.coderli.com/gesp-5-luogu-b3941/)）中，涉及到最大公约数和最小公倍数的计算，需要用到数论中的基本概念和算法。这部分既是五级考试大纲中明确要求的内容((https://www.coderli.com/gesp-5-exam-syllabus-elementary-number-theory/))，又是编程考试中常见的、可复用的功能函数。因此，在我和孩子的学习过程中，已要求将这部分知识，纳入“武器库”中。"
-linkTitle: "B3941 小杨的锻炼***](https://www.coderli.com/gesp-5-luogu-b3941/)）中，涉及到最大公约数和最小公倍数的计算，需要用到数论中的基本概念和算法。这部分既是五级考试大纲中明确要求的内容((https://www.coderli.com/gesp-5-exam-syllabus-elementary-number-theory/))，又是编程考试中常见的、可复用的功能函数。因此，在我和孩子的学习过程中，已要求将这部分知识，纳入“武器库”中。"
+title: 武器库-4, 最大公约数和最小公倍数
 date: 2025-10-16T08:00:00+0800
 author: OneCoder
 comments: true

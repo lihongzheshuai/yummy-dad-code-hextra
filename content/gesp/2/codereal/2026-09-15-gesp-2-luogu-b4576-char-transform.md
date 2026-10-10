@@ -1,6 +1,7 @@
 ---
 layout: post
-title: 202609-字符变换(luogu-B4576)
+title: "B4576 字符变换"
+linkTitle: "B4576 字符变换"
 date: 2026-09-15T15:15:00+0800
 author: OneCoder
 comments: true

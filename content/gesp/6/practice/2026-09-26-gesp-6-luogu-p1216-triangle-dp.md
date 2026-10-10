@@ -1,6 +1,7 @@
 ---
 layout: post
-title: luogu-P1216 数字三角形
+title: "P1216 数字三角形"
+linkTitle: "P1216 数字三角形"
 date: 2026-09-26T07:15:00+0800
 author: OneCoder
 comments: true

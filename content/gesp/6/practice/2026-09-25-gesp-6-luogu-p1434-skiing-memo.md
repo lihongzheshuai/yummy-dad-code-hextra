@@ -1,6 +1,7 @@
 ---
 layout: post
-title: luogu-P1434 滑雪
+title: "P1434 滑雪"
+linkTitle: "P1434 滑雪"
 date: 2026-09-25T07:15:00+0800
 author: OneCoder
 comments: true

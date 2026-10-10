@@ -1,6 +1,7 @@
 ---
 layout: post
-title: 202609-生成树计数(luogu-P17461)
+title: "P17461 生成树计数"
+linkTitle: "P17461 生成树计数"
 date: 2026-09-15T16:10:00+0800
 author: OneCoder
 comments: true

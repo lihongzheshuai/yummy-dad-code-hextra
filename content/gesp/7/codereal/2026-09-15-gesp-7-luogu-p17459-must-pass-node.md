@@ -1,6 +1,7 @@
 ---
 layout: post
-title: 202609-必经之路(luogu-P17459)
+title: "P17459 必经之路"
+linkTitle: "P17459 必经之路"
 date: 2026-09-15T16:00:00+0800
 author: OneCoder
 comments: true

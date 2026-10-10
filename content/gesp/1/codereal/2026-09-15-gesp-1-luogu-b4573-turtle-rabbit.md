@@ -1,6 +1,7 @@
 ---
 layout: post
-title: 202609-新龟兔赛跑(luogu-B4573)
+title: "B4573 新龟兔赛跑"
+linkTitle: "B4573 新龟兔赛跑"
 date: 2026-09-15T15:01:00+0800
 author: OneCoder
 comments: true

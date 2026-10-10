@@ -1,6 +1,7 @@
 ---
 layout: post
-title: luogu-P2440 木材加工
+title: "P2440 木材加工"
+linkTitle: "P2440 木材加工"
 date: 2026-09-21T07:15:00+0800
 author: OneCoder
 comments: true

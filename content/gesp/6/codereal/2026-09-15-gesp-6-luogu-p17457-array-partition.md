@@ -1,6 +1,7 @@
 ---
 layout: post
-title: 202609-数组划分(luogu-P17457)
+title: "P17457 数组划分"
+linkTitle: "P17457 数组划分"
 date: 2026-09-15T15:50:00+0800
 author: OneCoder
 comments: true

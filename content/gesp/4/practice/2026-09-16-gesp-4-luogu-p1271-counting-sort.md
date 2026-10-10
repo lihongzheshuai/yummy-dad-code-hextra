@@ -1,6 +1,7 @@
 ---
 layout: post
-title: luogu-P1271 选举学生会
+title: "P1271 选举学生会"
+linkTitle: "P1271 选举学生会"
 date: 2026-09-16T07:05:00+0800
 author: OneCoder
 comments: true

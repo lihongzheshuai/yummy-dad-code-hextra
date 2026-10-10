@@ -1,6 +1,7 @@
 ---
 layout: post
-title: 202609-直角三角形(luogu-B4575)
+title: "B4575 直角三角形"
+linkTitle: "B4575 直角三角形"
 date: 2026-09-15T15:10:00+0800
 author: OneCoder
 comments: true

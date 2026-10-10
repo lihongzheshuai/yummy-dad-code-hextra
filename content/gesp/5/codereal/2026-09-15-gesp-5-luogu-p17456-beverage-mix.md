@@ -1,6 +1,7 @@
 ---
 layout: post
-title: 202609-饮品调制(luogu-P17456)
+title: "P17456 饮品调制"
+linkTitle: "P17456 饮品调制"
 date: 2026-09-15T15:45:00+0800
 author: OneCoder
 comments: true

@@ -1,6 +1,7 @@
 ---
 layout: post
-title: luogu-P1443 马的遍历
+title: "P1443 马的遍历"
+linkTitle: "P1443 马的遍历"
 date: 2026-09-24T07:20:00+0800
 author: OneCoder
 comments: true

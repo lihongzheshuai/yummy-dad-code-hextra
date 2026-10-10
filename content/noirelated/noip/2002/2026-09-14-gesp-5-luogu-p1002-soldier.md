@@ -1,6 +1,7 @@
 ---
 layout: post
-title: luogu-P1002 过河卒
+title: "P1002 过河卒"
+linkTitle: "P1002 过河卒"
 date: 2026-09-14T10:30:00+0800
 author: OneCoder
 comments: true

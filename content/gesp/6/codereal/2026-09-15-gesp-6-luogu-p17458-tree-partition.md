@@ -1,6 +1,7 @@
 ---
 layout: post
-title: 202609-分树规划(luogu-P17458)
+title: "P17458 分树规划"
+linkTitle: "P17458 分树规划"
 date: 2026-09-15T15:55:00+0800
 author: OneCoder
 comments: true

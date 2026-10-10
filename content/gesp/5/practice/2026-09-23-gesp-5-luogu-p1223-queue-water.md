@@ -1,6 +1,7 @@
 ---
 layout: post
-title: luogu-P1223 排队接水
+title: "P1223 排队接水"
+linkTitle: "P1223 排队接水"
 date: 2026-09-23T07:15:00+0800
 author: OneCoder
 comments: true

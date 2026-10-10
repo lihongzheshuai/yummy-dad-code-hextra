@@ -1,6 +1,7 @@
 ---
 layout: post
-title: 202609-新汉诺塔(luogu-B4579)
+title: "B4579 新汉诺塔"
+linkTitle: "B4579 新汉诺塔"
 date: 2026-09-15T15:30:00+0800
 author: OneCoder
 comments: true

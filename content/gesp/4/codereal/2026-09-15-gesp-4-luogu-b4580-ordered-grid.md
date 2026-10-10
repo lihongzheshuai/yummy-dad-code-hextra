@@ -1,6 +1,7 @@
 ---
 layout: post
-title: 202609-有序网格(luogu-B4580)
+title: "B4580 有序网格"
+linkTitle: "B4580 有序网格"
 date: 2026-09-15T15:35:00+0800
 author: OneCoder
 comments: true

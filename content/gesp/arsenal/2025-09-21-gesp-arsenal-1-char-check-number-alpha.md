@@ -1,6 +1,7 @@
 ---
 layout: post
-title: 武器库-1, 字符类型判断
+title: "B3640 T3 句子反转***](https://www.coderli.com/gesp-3-luogu-b3640/)和(https://www.coderli.com/gesp-3-luogu-b2117/)等题目中，都涉及到对单个字符进行是否是数字、字母或大小的判断的逻辑。这部分代码理论上是通用的，是你应该掌握的必备技能。今天我们就来详细了解一下这部分技能，开始丰富你的”武器库“。"
+linkTitle: "B3640 T3 句子反转***](https://www.coderli.com/gesp-3-luogu-b3640/)和(https://www.coderli.com/gesp-3-luogu-b2117/)等题目中，都涉及到对单个字符进行是否是数字、字母或大小的判断的逻辑。这部分代码理论上是通用的，是你应该掌握的必备技能。今天我们就来详细了解一下这部分技能，开始丰富你的”武器库“。"
 date: 2025-09-21T08:00:00+0800
 author: OneCoder
 comments: true

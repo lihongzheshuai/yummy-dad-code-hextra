@@ -1,6 +1,7 @@
 ---
 layout: post
-title: 202609-分割字符串(luogu-B4578)
+title: "B4578 分割字符串"
+linkTitle: "B4578 分割字符串"
 date: 2026-09-15T15:25:00+0800
 author: OneCoder
 comments: true

@@ -1,6 +1,7 @@
 ---
 layout: post
-title: 202609-棋盘上的奖赏(luogu-B4574)
+title: "B4574 棋盘上的奖赏"
+linkTitle: "B4574 棋盘上的奖赏"
 date: 2026-09-15T15:05:00+0800
 author: OneCoder
 comments: true

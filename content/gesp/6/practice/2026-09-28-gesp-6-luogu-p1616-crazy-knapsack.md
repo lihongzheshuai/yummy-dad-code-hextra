@@ -1,6 +1,7 @@
 ---
 layout: post
-title: luogu-P1616 疯狂的采药
+title: "P1616 疯狂的采药"
+linkTitle: "P1616 疯狂的采药"
 date: 2026-09-28T07:15:00+0800
 author: OneCoder
 comments: true

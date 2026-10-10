@@ -1,6 +1,7 @@
 ---
 layout: post
-title: GESP一级考纲考点揭秘
+title: "B3953 ，找因数](https://www.coderli.com/gesp-1-luogu-b3953/))"
+linkTitle: "B3953 ，找因数](https://www.coderli.com/gesp-1-luogu-b3953/))"
 date: 2026-01-06T08:00:00+0800
 author: OneCoder
 comments: true

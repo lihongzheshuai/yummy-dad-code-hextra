@@ -1,6 +1,7 @@
 ---
 layout: post
-title: 202609-公共二进制位(luogu-B4577)
+title: "B4577 公共二进制位"
+linkTitle: "B4577 公共二进制位"
 date: 2026-09-15T15:20:00+0800
 author: OneCoder
 comments: true

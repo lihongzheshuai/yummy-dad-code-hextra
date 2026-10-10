@@ -1,6 +1,7 @@
 ---
 layout: post
-title: 202609-哥德巴赫猜想(luogu-P17455)
+title: "P17455 哥德巴赫猜想"
+linkTitle: "P17455 哥德巴赫猜想"
 date: 2026-09-15T15:40:00+0800
 author: OneCoder
 comments: true

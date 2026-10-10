@@ -1,6 +1,7 @@
 ---
 layout: post
-title: 202609-括号序列(luogu-P17460)
+title: "P17460 括号序列"
+linkTitle: "P17460 括号序列"
 date: 2026-09-15T16:05:00+0800
 author: OneCoder
 comments: true

@@ -20,6 +20,7 @@ NOI 竞赛及系列活动的主要内容是计算机知识、算法设计及程�
 {{< card link="2006" title="2006年" icon="book-open" >}}
 {{< card link="2007" title="2007年" icon="book-open" >}}
 {{< card link="2008" title="2008年" icon="book-open" >}}
+{{< card link="2009" title="2009年" icon="book-open" >}}
 {{< card link="2011" title="2011年" icon="book-open" >}}
 {{< card link="2012" title="2012年" icon="book-open" >}}
 {{< card link="2015" title="2015年" icon="book-open" >}}

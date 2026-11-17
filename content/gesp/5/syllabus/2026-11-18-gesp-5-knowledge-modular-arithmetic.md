@@ -2,7 +2,7 @@
 layout: post
 title: "同余定理与取模运算铁律"
 linkTitle: "同余定理与取模运算铁律"
-date: 2026-11-18T08:00:00+0800
+date: 2026-11-18T07:00:00+0800
 author: OneCoder
 comments: true
 categories:

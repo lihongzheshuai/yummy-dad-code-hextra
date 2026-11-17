@@ -189,3 +189,8 @@ markup:
 services:
   googleAnalytics:
     ID: G-5L9P03RR0R
+
+minify:
+  tdewolff:
+    html:
+      keepQuotes: true
